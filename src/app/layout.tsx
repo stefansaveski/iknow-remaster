@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import { config } from '@fortawesome/fontawesome-svg-core';
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import Header from "@/components/header";
+import Navbar from "@/components/navbar";
 
 // Prevent FontAwesome from adding CSS automatically
 config.autoAddCss = false;
@@ -19,7 +21,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "IKnow - UKIM",
-  description: "University Managment System used to provide students informations and manage their progress.",
+  description:
+    "University Managment System used to provide students informations and manage their progress.",
 };
 
 export default function RootLayout({
@@ -29,10 +32,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className="mx-auto max-w-6xl px-4">{children}</div>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <div className="mx-auto max-w-6xl px-4">
+          <Header />
+          <Navbar />
+          {children}
+        </div>
       </body>
     </html>
   );
