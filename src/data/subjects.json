@@ -1,0 +1,441 @@
+{
+  "semesters": [
+    {
+      "id": "winter_2025_2026",
+      "name": "Зимски (2025/2026)",
+      "status": "валиден",
+      "serviceNumber": "1029816"
+    },
+    {
+      "id": "summer_2024_2025",
+      "name": "Летен (2024/2025)",
+      "status": "валиден",
+      "serviceNumber": "1028745"
+    },
+    {
+      "id": "winter_2024_2025",
+      "name": "Зимски (2024/2025)",
+      "status": "валиден",
+      "serviceNumber": "1027634"
+    },
+    {
+      "id": "summer_2023_2024",
+      "name": "Летен (2023/2024)",
+      "status": "валиден",
+      "serviceNumber": "1026523"
+    },
+    {
+      "id": "winter_2023_2024",
+      "name": "Зимски (2023/2024)",
+      "status": "валиден",
+      "serviceNumber": "1025412"
+    }
+  ],
+  "currentSemester": {
+    "id": "winter_2025_2026",
+    "name": "Зимски (2025/2026)",
+    "status": "валиден",
+    "serviceNumber": "1029816",
+    "ticketNumber": "427306",
+    "debt": "0,00",
+    "financialInfo": {
+      "sum": 1,
+      "paid": "0,00",
+      "due": "0,00",
+      "materialCosts": "Осигурување, Административна такса, Тетратки (испити), зимски семестар: 1000,00",
+      "credits": "30,00",
+      "totalCredits": "30,00",
+      "MKSA": "750,00",
+      "electronicRegistration": "100,00",
+      "eUKIM": "350,00",
+      "bankProvision": "25,00",
+      "total": "2226,00"
+    }
+  },
+  "subjectsBySemester": {
+    "winter_2025_2026": [
+      {
+        "id": 1,
+        "code": "F23L3W004",
+        "hours": "2+4",
+        "kojPat": 1,
+        "name": "Бази на податоци",
+        "semester": 5,
+        "status": "Зад.",
+        "signature": "",
+        "group": "",
+        "professor": ""
+      },
+      {
+        "id": 2,
+        "code": "F23L3W008",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Вовед во науката за податоци",
+        "semester": 5,
+        "status": "Зад.",
+        "signature": "",
+        "group": "",
+        "professor": ""
+      },
+      {
+        "id": 3,
+        "code": "F23L3W024",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Веб програмирање",
+        "semester": 5,
+        "status": "Зад.",
+        "signature": "",
+        "group": "",
+        "professor": ""
+      },
+      {
+        "id": 4,
+        "code": "F23L3W136",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Напреден веб дизајн",
+        "semester": 5,
+        "status": "Зад.",
+        "signature": "",
+        "group": "",
+        "professor": ""
+      },
+      {
+        "id": 5,
+        "code": "F23L3W140",
+        "hours": "2+4",
+        "kojPat": 1,
+        "name": "Напредно програмирање",
+        "semester": 5,
+        "status": "Изб.",
+        "signature": "",
+        "group": "",
+        "professor": ""
+      }
+    ],
+    "summer_2024_2025": [
+      {
+        "id": 1,
+        "code": "F23L3S100",
+        "hours": "0+0",
+        "kojPat": 1,
+        "name": "Деловна пракса",
+        "semester": 4,
+        "status": "Зад.",
+        "signature": "",
+        "group": "проф. Стојменски",
+        "professor": "Стојменски Александар"
+      },
+      {
+        "id": 2,
+        "code": "F23L2S026",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Маркетинг",
+        "semester": 4,
+        "status": "Зад.",
+        "signature": "",
+        "group": "проф. Стојкоска",
+        "professor": "Стојкоска Билјана"
+      },
+      {
+        "id": 3,
+        "code": "F23L2S017",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Оперативни системи",
+        "semester": 4,
+        "status": "Зад.",
+        "signature": "",
+        "group": "проф. Ацковска",
+        "professor": "Ацковска Невена"
+      },
+      {
+        "id": 4,
+        "code": "F23L2S029",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Софтверско инженерство",
+        "semester": 4,
+        "status": "Зад.",
+        "signature": "",
+        "group": "проф. Маџаров",
+        "professor": "Маџаров Ѓорѓи"
+      },
+      {
+        "id": 5,
+        "code": "F23L2S030",
+        "hours": "2+4",
+        "kojPat": 1,
+        "name": "Вештачка интелигенција",
+        "semester": 4,
+        "status": "Изб.",
+        "signature": "",
+        "group": "проф. Гиевска",
+        "professor": "Гиевска Соња"
+      }
+    ],
+    "winter_2024_2025": [
+      {
+        "id": 1,
+        "code": "F23L2W100",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Економија за ИКТ инженери",
+        "semester": 3,
+        "status": "Зад.",
+        "signature": "Добива",
+        "group": "проф. Саркањац",
+        "professor": "Јанеска Саркањац Смилка"
+      },
+      {
+        "id": 2,
+        "code": "F23L2W014",
+        "hours": "2+4",
+        "kojPat": 1,
+        "name": "Компјутерски мрежи и безбедност",
+        "semester": 3,
+        "status": "Зад.",
+        "signature": "Добива",
+        "group": "проф. Граматиков",
+        "professor": "Граматиков Сашо"
+      },
+      {
+        "id": 3,
+        "code": "F23L2W201",
+        "hours": "2+4",
+        "kojPat": 1,
+        "name": "Примена на алгоритми и податочни структури",
+        "semester": 3,
+        "status": "Зад.",
+        "signature": "Добива",
+        "group": "проф. Котеска",
+        "professor": "Котеска Бојана"
+      },
+      {
+        "id": 4,
+        "code": "F23L2W109",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Интернет програмирање на клиентска страна",
+        "semester": 3,
+        "status": "Изб.",
+        "signature": "Добива",
+        "group": "проф. Лошковска",
+        "professor": "Лошковска Сузана"
+      },
+      {
+        "id": 5,
+        "code": "F23L2W167",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Шаблони за дизајн на кориснички интерфејси",
+        "semester": 3,
+        "status": "Изб.",
+        "signature": "Добива",
+        "group": "проф. Лошковска",
+        "professor": "Лошковска Сузана"
+      }
+    ],
+    "summer_2023_2024": [
+      {
+        "id": 1,
+        "code": "F23L1S003",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Архитектура и организација на компјутери",
+        "semester": 2,
+        "status": "Зад.",
+        "signature": "Добива",
+        "group": "проф. Антовски",
+        "professor": "Антовски Љупчо"
+      },
+      {
+        "id": 2,
+        "code": "F23L1S023",
+        "hours": "3+3",
+        "kojPat": 1,
+        "name": "Бизнис статистика",
+        "semester": 2,
+        "status": "Зад.",
+        "signature": "Добива",
+        "group": "проф. Јанчески",
+        "professor": "Јанчески Методија"
+      },
+      {
+        "id": 3,
+        "code": "F23L1S016",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Објектно-ориентирано програмирање",
+        "semester": 2,
+        "status": "Зад.",
+        "signature": "Добива",
+        "group": "проф. Ѓорѓевиќ",
+        "professor": "Ѓорѓевиќ Дејан"
+      },
+      {
+        "id": 4,
+        "code": "F23L1S146",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Основи на Веб дизајн",
+        "semester": 2,
+        "status": "Зад.",
+        "signature": "",
+        "group": "проф. Стојменски",
+        "professor": "Стојменски Александар"
+      },
+      {
+        "id": 5,
+        "code": "F23L1S120",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Креативни вештини за решавање проблеми",
+        "semester": 2,
+        "status": "Изб.",
+        "signature": "Добива",
+        "group": "проф. Филипоска",
+        "professor": "Филипоска Соња"
+      }
+    ],
+    "winter_2023_2024": [
+      {
+        "id": 1,
+        "code": "F23L1W004",
+        "hours": "0+2",
+        "kojPat": 1,
+        "name": "Спорт и здравје",
+        "semester": 1,
+        "status": "Зад.",
+        "signature": "",
+        "group": "",
+        "professor": "Новачевска Славица"
+      },
+      {
+        "id": 2,
+        "code": "F23L1W005",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Бизнис и менаџмент",
+        "semester": 1,
+        "status": "Зад.",
+        "signature": "Добива",
+        "group": "проф. Здравески Владимир",
+        "professor": "Здравески Владимир"
+      },
+      {
+        "id": 3,
+        "code": "F23L1W007",
+        "hours": "2+3",
+        "kojPat": 1,
+        "name": "Вовед во компјутерските науки",
+        "semester": 1,
+        "status": "Зад.",
+        "signature": "",
+        "group": "проф. Китановски",
+        "professor": "Китановски Иван"
+      },
+      {
+        "id": 4,
+        "code": "F23L1W018",
+        "hours": "4+0",
+        "kojPat": 1,
+        "name": "Професионални вештини",
+        "semester": 1,
+        "status": "Зад.",
+        "signature": "",
+        "group": "проф. Мирчев",
+        "professor": "Мирчев Мирослав"
+      },
+      {
+        "id": 5,
+        "code": "F23L1W020",
+        "hours": "2+4",
+        "kojPat": 1,
+        "name": "Структурно програмирање",
+        "semester": 1,
+        "status": "Зад.",
+        "signature": "",
+        "group": "проф. Маџаров",
+        "professor": "Маџаров Ѓорѓи"
+      },
+      {
+        "id": 6,
+        "code": "F23L2W003",
+        "hours": "3+3",
+        "kojPat": 1,
+        "name": "Избрани теми од математика",
+        "semester": 1,
+        "status": "Зад.",
+        "signature": "Добива",
+        "group": "проф. Јанчески",
+        "professor": "Јанчески Методија"
+      }
+    ]
+  },
+  "subjects": [
+    {
+      "id": 1,
+      "code": "F23L3W004",
+      "hours": "2+4",
+      "kojPat": 1,
+      "name": "Бази на податоци",
+      "semester": 5,
+      "status": "Зад.",
+      "signature": "",
+      "group": "",
+      "professor": ""
+    },
+    {
+      "id": 2,
+      "code": "F23L3W008",
+      "hours": "2+3",
+      "kojPat": 1,
+      "name": "Вовед во науката за податоци",
+      "semester": 5,
+      "status": "Зад.",
+      "signature": "",
+      "group": "",
+      "professor": ""
+    },
+    {
+      "id": 3,
+      "code": "F23L3W024",
+      "hours": "2+3",
+      "kojPat": 1,
+      "name": "Веб програмирање",
+      "semester": 5,
+      "status": "Зад.",
+      "signature": "",
+      "group": "",
+      "professor": ""
+    },
+    {
+      "id": 4,
+      "code": "F23L3W136",
+      "hours": "2+3",
+      "kojPat": 1,
+      "name": "Напреден веб дизајн",
+      "semester": 5,
+      "status": "Зад.",
+      "signature": "",
+      "group": "",
+      "professor": ""
+    },
+    {
+      "id": 5,
+      "code": "F23L3W140",
+      "hours": "2+4",
+      "kojPat": 1,
+      "name": "Напредно програмирање",
+      "semester": 5,
+      "status": "Изб.",
+      "signature": "",
+      "group": "",
+      "professor": ""
+    }
+  ]
+}

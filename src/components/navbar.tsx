@@ -8,6 +8,7 @@ import { faListCheck } from '@fortawesome/free-solid-svg-icons';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { faBars, faTimes, faGraduationCap } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import Link from 'next/link';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,12 +18,12 @@ const Navbar = () => {
   };
 
   const menuItems = [
-    { icon: faUser, label: 'Профил' },
-    { icon: faBookmark, label: 'Семестри' },
-    { icon: faBook, label: 'Предмети' },
-    { icon: faPenToSquare, label: 'Пријави' },
-    { icon: faListCheck, label: 'Положени' },
-    { icon: faFilePdf, label: 'Документи' }
+    { icon: faUser, label: 'Профил', href: '/profile' },
+    { icon: faBookmark, label: 'Семестри', href: '/semesters' },
+    { icon: faBook, label: 'Предмети', href: '/subjects' },
+    { icon: faPenToSquare, label: 'Пријави', href: '/applications' },
+    { icon: faListCheck, label: 'Положени', href: '/exams' },
+    { icon: faFilePdf, label: 'Документи', href: '/documents' }
   ];
 
   return (
@@ -30,10 +31,12 @@ const Navbar = () => {
       {/* Desktop Navbar */}
       <nav className="hidden md:flex flex-row gap-2 justify-evenly bg-primary text-white p-7 rounded-xl my-5 text-xl">
         {menuItems.map((item, index) => (
-          <div key={index} className="group flex flex-row items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-20 hover:scale-105 hover:shadow-lg hover:text-primary">
-            <FontAwesomeIcon icon={item.icon} className="transition-transform duration-300 group-hover:rotate-12" />
-            <span>{item.label}</span>
-          </div>
+          <Link key={index} href={item.href}>
+            <div className="group flex flex-row items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-20 hover:scale-105 hover:shadow-lg hover:text-primary">
+              <FontAwesomeIcon icon={item.icon} className="transition-transform duration-300 group-hover:rotate-12" />
+              <span>{item.label}</span>
+            </div>
+          </Link>
         ))}
       </nav>
 
@@ -64,10 +67,12 @@ const Navbar = () => {
         }`}>
           <div className="px-4 pb-4 space-y-2">
             {menuItems.map((item, index) => (
-              <div key={index} className="group flex flex-row items-center gap-3 px-3 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-20 hover:text-primary">
-                <FontAwesomeIcon icon={item.icon} className="transition-transform duration-300 group-hover:rotate-12" />
-                <span className="text-lg">{item.label}</span>
-              </div>
+              <Link key={index} href={item.href}>
+                <div className="group flex flex-row items-center gap-3 px-3 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-20 hover:text-primary">
+                  <FontAwesomeIcon icon={item.icon} className="transition-transform duration-300 group-hover:rotate-12" />
+                  <span className="text-lg">{item.label}</span>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
