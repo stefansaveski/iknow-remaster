@@ -9,8 +9,7 @@ import {
   faMoneyBillWave,
   faSignature,
   faCheckCircle,
-  faTimesCircle,
-  faExclamationTriangle
+  faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
 import semestersData from '@/data/semesters.json';
 
@@ -133,7 +132,7 @@ export default function SemestersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {semesters.map((semester, index) => (
+              {semesters.map((semester) => (
                 <tr key={semester.id} className="hover:bg-gray-50 transition-colors">
                   <TableCell className="font-medium text-gray-900">{semester.id}</TableCell>
                   <TableCell className="font-medium text-primary">{semester.semester}</TableCell>

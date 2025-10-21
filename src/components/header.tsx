@@ -1,6 +1,6 @@
 "use client"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 
 const Header = () => {
