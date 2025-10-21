@@ -210,8 +210,8 @@ export default function SubjectsPage() {
                     <span className="font-semibold">{currentSemester.financialInfo.bankProvision}</span>
                   </div>
                   <div className="flex justify-between items-center py-3 border-t-2 border-primary bg-primary bg-opacity-5 rounded-lg px-4">
-                    <span className="font-bold text-primary">Тотал:</span>
-                    <span className="font-bold text-xl text-primary">{currentSemester.financialInfo.total}</span>
+                    <span className="font-bold text-white">Тотал:</span>
+                    <span className="font-bold text-xl text-white">{currentSemester.financialInfo.total}</span>
                   </div>
                 </div>
               </div>
