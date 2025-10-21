@@ -18,12 +18,12 @@ const Navbar = () => {
   };
 
   const menuItems = [
-    { icon: faUser, label: 'Профил', href: '/profile' },
-    { icon: faBookmark, label: 'Семестри', href: '/semesters' },
-    { icon: faBook, label: 'Предмети', href: '/subjects' },
-    { icon: faPenToSquare, label: 'Пријави', href: '/applications' },
-    { icon: faListCheck, label: 'Положени', href: '/exams' },
-    { icon: faFilePdf, label: 'Документи', href: '/documents' }
+    { icon: faUser, label: 'Профил', href: '/students/profile' },
+    { icon: faBookmark, label: 'Семестри', href: '/students/semesters' },
+    { icon: faBook, label: 'Предмети', href: '/students/subjects' },
+    { icon: faPenToSquare, label: 'Пријави', href: '/students/applications' },
+    { icon: faListCheck, label: 'Положени', href: '/students/exams' },
+    { icon: faFilePdf, label: 'Документи', href: '/students/documents' }
   ];
 
   return (
