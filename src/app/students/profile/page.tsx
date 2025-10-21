@@ -18,10 +18,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import studentData from '@/data/student-profile.json';
 
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+
 interface InfoRowProps {
   label: string;
   value: string | number;
-  icon?: any;
+  icon?: IconDefinition;
 }
 
 const InfoRow = ({ label, value, icon }: InfoRowProps) => (
@@ -38,7 +40,7 @@ const InfoRow = ({ label, value, icon }: InfoRowProps) => (
 
 interface SectionProps {
   title: string;
-  icon: any;
+  icon: IconDefinition;
   children: React.ReactNode;
 }
 

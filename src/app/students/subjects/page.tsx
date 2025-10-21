@@ -4,14 +4,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faBook, 
   faChevronDown,
-  faInfoCircle,
-  faMoneyBillWave,
-  faCreditCard,
-  faFileInvoice,
-  faGraduationCap
+  faFileInvoice
 } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import subjectsData from '@/data/subjects.json';
+
+interface Subject {
+  id: number;
+  code: string;
+  hours: string;
+  kojPat: number;
+  name: string;
+  semester: number;
+  status: string;
+  signature: string;
+  group: string;
+  professor: string;
+}
 
 interface TableCellProps {
   children: React.ReactNode;
@@ -53,7 +62,7 @@ export default function SubjectsPage() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
   const currentSemesterData = subjectsData.semesters.find(s => s.id === selectedSemester) || subjectsData.currentSemester;
-  const currentSubjects = (subjectsData.subjectsBySemester as any)[selectedSemester] || [];
+  const currentSubjects: Subject[] = subjectsData.subjectsBySemester[selectedSemester as keyof typeof subjectsData.subjectsBySemester] || [];
   const { currentSemester } = subjectsData;
 
   return (
@@ -243,7 +252,7 @@ export default function SubjectsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {currentSubjects.map((subject: any) => (
+              {currentSubjects.map((subject: Subject) => (
                 <tr key={subject.id} className="hover:bg-gray-50 transition-colors">
                   <TableCell className="font-medium text-gray-900">{subject.id}</TableCell>
                   <TableCell className="font-mono text-sm text-primary font-medium">{subject.code}</TableCell>

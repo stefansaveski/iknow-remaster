@@ -4,12 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faFilePdf, 
   faChevronDown,
-  faDownload,
   faCheckCircle,
   faMoneyBillWave,
   faFileText,
-  faCalendarAlt,
-  faCommentDots,
   faChevronLeft,
   faChevronRight,
   faAngleDoubleLeft,
@@ -59,7 +56,7 @@ export default function DocumentsPage() {
   const [recordsPerPage, setRecordsPerPage] = useState(15);
 
   const selectedDocument = documentsData.documentTypes.find(d => d.id === selectedDocumentType);
-  const { documents, pagination, paymentInfo } = documentsData;
+  const { documents, paymentInfo } = documentsData;
 
   const totalPages = Math.ceil(documents.length / recordsPerPage);
   const startIndex = (currentPage - 1) * recordsPerPage;
