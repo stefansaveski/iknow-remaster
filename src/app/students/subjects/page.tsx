@@ -6,8 +6,8 @@ import {
   faChevronDown,
   faFileInvoice
 } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
-import subjectsData from '@/data/subjects.json';
+import { useEffect, useState } from 'react';
+import { getAccessToken } from '@/lib/auth';
 
 interface Subject {
   id: number;
@@ -20,6 +20,118 @@ interface Subject {
   signature: string;
   group: string;
   professor: string;
+}
+
+type SemesterInfo = {
+  id: number;
+  name: string;
+  status: string;
+  serviceNumber: string | number;
+};
+
+type FinancialInfo = {
+  sum: string | number;
+  paid: string;
+  due: string;
+  materialCosts: string;
+  credits: string;
+  MKSA: string;
+  electronicRegistration: string;
+  eUKIM: string;
+  bankProvision: string;
+  total: string;
+};
+
+type CurrentSemester = {
+  id: string;
+  name: string;
+  status: string;
+  serviceNumber: string | number;
+  ticketNumber: string;
+  debt: string;
+  financialInfo: FinancialInfo;
+};
+
+type SubjectsResponse = {
+  currentSemester: CurrentSemester;
+  semesters: SemesterInfo[];
+  subjectsBySemester: Record<string, Subject[]>;
+  semesterKeyById: Record<number, string>;
+};
+
+type ApiCurrentSemester = {
+  id: string;
+  name: string;
+  status: string;
+  serviceNumber: string | number;
+  ticketNumber: string;
+  debt: string;
+  financialInfo: {
+    sum: string | number;
+    paid: string;
+    due: string;
+    materialCosts: string;
+    credits: string;
+    totalCredits?: string;
+    mksa?: string;
+    MKSA?: string;
+    electronicRegistration: string;
+    eUKIM: string;
+    bankProvision: string;
+    total: string;
+  };
+};
+
+type ApiSubjectsResponse = {
+  semesters: SemesterInfo[];
+  currentSemester?: ApiCurrentSemester;
+  currentSemestar?: ApiCurrentSemester;
+  subjectsBySemester: Record<string, Subject[]>;
+};
+
+function normalizeKey(input: string) {
+  return input.toLowerCase().replace(/\s|\(|\)|\.|,/g, '');
+}
+
+function detectSeasonFromName(name: string): 'summer' | 'winter' | null {
+  const n = name.toLowerCase();
+  if (n.includes('летен')) return 'summer';
+  if (n.includes('зимски')) return 'winter';
+  return null;
+}
+
+function buildSemesterKeyById(semesters: SemesterInfo[], keys: string[]) {
+  const keyBySeason: Partial<Record<'summer' | 'winter', string>> = {};
+  for (const key of keys) {
+    const k = key.toLowerCase();
+    if (k.includes('summer')) keyBySeason.summer = key;
+    if (k.includes('winter')) keyBySeason.winter = key;
+  }
+
+  const mapping: Record<number, string> = {};
+  for (const s of semesters) {
+    const season = detectSeasonFromName(s.name);
+    const mapped = season ? keyBySeason[season] : undefined;
+    if (mapped) mapping[s.id] = mapped;
+  }
+
+  // Fallback: if we couldn't infer seasons, try matching by normalized names.
+  if (Object.keys(mapping).length === 0) {
+    for (const s of semesters) {
+      const ns = normalizeKey(s.name);
+      const match = keys.find((k) => normalizeKey(k).includes(ns) || ns.includes(normalizeKey(k)));
+      if (match) mapping[s.id] = match;
+    }
+  }
+
+  // Last resort: map in order.
+  if (Object.keys(mapping).length === 0) {
+    semesters.forEach((s, idx) => {
+      if (keys[idx]) mapping[s.id] = keys[idx];
+    });
+  }
+
+  return mapping;
 }
 
 interface TableCellProps {
@@ -58,11 +170,132 @@ const StatusBadge = ({ status }: { status: string }) => {
 };
 
 export default function SubjectsPage() {
-  const [selectedSemester, setSelectedSemester] = useState(subjectsData.currentSemester.id);
+  const [subjectsData, setSubjectsData] = useState<SubjectsResponse | null>(null);
+  const [selectedSemester, setSelectedSemester] = useState<number | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      setIsLoading(true);
+      setErrorMessage(null);
+
+      const token = getAccessToken();
+      if (!token) {
+        setErrorMessage('Not authenticated. Please login again.');
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:5147/api/user/getSubjects', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const text = await response.text().catch(() => '');
+          throw new Error(text || `Failed to load subjects (${response.status})`);
+        }
+
+        const apiData = (await response.json()) as ApiSubjectsResponse;
+        if (cancelled) return;
+
+        const current = apiData.currentSemester ?? apiData.currentSemestar;
+        if (!current) {
+          throw new Error('Response missing currentSemestar/currentSemester');
+        }
+
+        const keys = Object.keys(apiData.subjectsBySemester ?? {});
+        const semesterKeyById = buildSemesterKeyById(apiData.semesters ?? [], keys);
+
+        const normalized: SubjectsResponse = {
+          semesters: apiData.semesters ?? [],
+          subjectsBySemester: apiData.subjectsBySemester ?? {},
+          semesterKeyById,
+          currentSemester: {
+            id: current.id,
+            name: current.name,
+            status: current.status,
+            serviceNumber: current.serviceNumber,
+            ticketNumber: current.ticketNumber,
+            debt: current.debt,
+            financialInfo: {
+              sum: current.financialInfo.sum,
+              paid: current.financialInfo.paid,
+              due: current.financialInfo.due,
+              materialCosts: current.financialInfo.materialCosts,
+              credits: current.financialInfo.credits,
+              MKSA: current.financialInfo.MKSA ?? current.financialInfo.mksa ?? '',
+              electronicRegistration: current.financialInfo.electronicRegistration,
+              eUKIM: current.financialInfo.eUKIM,
+              bankProvision: current.financialInfo.bankProvision,
+              total: current.financialInfo.total,
+            },
+          },
+        };
+
+        setSubjectsData(normalized);
+
+        setSelectedSemester((prev) => {
+          if (prev !== null) return prev;
+          const season = detectSeasonFromName(current.name);
+          if (season) {
+            const key = keys.find((k) => k.toLowerCase().includes(season));
+            if (key) {
+              const matchId = normalized.semesters.find((s) => normalized.semesterKeyById[s.id] === key)?.id;
+              if (typeof matchId === 'number') return matchId;
+            }
+          }
+          return normalized.semesters[0]?.id ?? null;
+        });
+      } catch (err) {
+        if (!cancelled) {
+          setErrorMessage(err instanceof Error ? err.message : 'Failed to load subjects.');
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+
+    void load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen pb-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          Loading...
+        </div>
+      </div>
+    );
+  }
+
+  if (errorMessage || !subjectsData || selectedSemester === null) {
+    return (
+      <div className="min-h-screen pb-8">
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {errorMessage ?? 'Failed to load subjects.'}
+        </div>
+      </div>
+    );
+  }
   
-  const currentSemesterData = subjectsData.semesters.find(s => s.id === selectedSemester) || subjectsData.currentSemester;
-  const currentSubjects: Subject[] = subjectsData.subjectsBySemester[selectedSemester as keyof typeof subjectsData.subjectsBySemester] || [];
+  const currentSemesterData =
+    subjectsData.semesters.find((s) => s.id === selectedSemester) ?? subjectsData.semesters[0];
+  const semesterKey =
+    subjectsData.semesterKeyById[selectedSemester] ??
+    Object.keys(subjectsData.subjectsBySemester)[0];
+  const currentSubjects: Subject[] = semesterKey ? subjectsData.subjectsBySemester[semesterKey] || [] : [];
   const { currentSemester } = subjectsData;
 
   return (

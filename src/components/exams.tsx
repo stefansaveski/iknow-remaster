@@ -1,240 +1,122 @@
 "use client"
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { getAccessToken } from '@/lib/auth';
+
+type PassedSubject = {
+  id: number;
+  subjectId: number;
+  code: string;
+  subject: string;
+  credits: number;
+  grade: number;
+  gradeText: string;
+  date: string; // DD.MM.YYYY
+  semester: string;
+  professor: string;
+};
+
+type PassedSubjectsResponse = {
+  passedSubjects: PassedSubject[];
+};
+
+type ExamRow = {
+  id: number;
+  code: string;
+  subject: string;
+  date: string;
+  semester: string;
+  credits: number;
+  grade: number;
+};
 
 const Exams = () => {
   const [sortField, setSortField] = useState<'grade' | 'date' | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null);
-  // Real exam data
-  const stats = {
-    average: 8.95,
-    credits: { current: 108, total: 240 },
-    passed: 19,
-    remaining: 22
-  };
+  const [exams, setExams] = useState<ExamRow[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const exams = [
-    {
-      id: 1,
-      code: "F23L1W005",
-      subject: "Бизнис и менаџмент",
-      session: "2024 (Зимска) Прва испитна сесија",
-      date: "21.02.2024",
-      semester: 1,
-      credits: 6.00,
-      type: "З",
-      grade: 7
-    },
-    {
-      id: 2,
-      code: "F23L1W007",
-      subject: "Вовед во компјутерските науки",
-      session: "2024 (Зимска) Прва испитна сесија",
-      date: "06.02.2024",
-      semester: 1,
-      credits: 6.00,
-      type: "З",
-      grade: 10
-    },
-    {
-      id: 3,
-      code: "F23L2W003",
-      subject: "Избрани теми од математика",
-      session: "2024 (Зимска) Прва испитна сесија",
-      date: "12.02.2024",
-      semester: 1,
-      credits: 6.00,
-      type: "З",
-      grade: 9
-    },
-    {
-      id: 4,
-      code: "F23L1W018",
-      subject: "Професионални вештини",
-      session: "2024 (Зимска) Прва испитна сесија",
-      date: "01.02.2024",
-      semester: 1,
-      credits: 4.00,
-      type: "З",
-      grade: 9
-    },
-    {
-      id: 5,
-      code: "F23L1W004",
-      subject: "Спорт и здравје",
-      session: "2024 (Летна) Втора испитна сесија",
-      date: "15.07.2024",
-      semester: 1,
-      credits: 2.00,
-      type: "З",
-      grade: "Реализиран"
-    },
-    {
-      id: 6,
-      code: "F23L1W020",
-      subject: "Структурно програмирање",
-      session: "2024 (Зимска) Прва испитна сесија",
-      date: "12.02.2024",
-      semester: 1,
-      credits: 6.00,
-      type: "З",
-      grade: 10
-    },
-    {
-      id: 7,
-      code: "F23L1S003",
-      subject: "Архитектура и организација на компјутери",
-      session: "2024 (Летна) Втора испитна сесија",
-      date: "03.07.2024",
-      semester: 2,
-      credits: 6.00,
-      type: "З",
-      grade: 9
-    },
-    {
-      id: 8,
-      code: "F23L1S023",
-      subject: "Бизнис статистика",
-      session: "2024 (Летна) Втора испитна сесија",
-      date: "02.07.2024",
-      semester: 2,
-      credits: 6.00,
-      type: "З",
-      grade: 8
-    },
-    {
-      id: 9,
-      code: "F23L1S120",
-      subject: "Креативни вештини за решавање проблеми",
-      session: "2024 (Летна) Втора испитна сесија",
-      date: "25.06.2024",
-      semester: 2,
-      credits: 6.00,
-      type: "И",
-      grade: 10
-    },
-    {
-      id: 10,
-      code: "F23L1S016",
-      subject: "Објектно-ориентирано програмирање",
-      session: "2024 (Летна) Втора испитна сесија",
-      date: "13.07.2024",
-      semester: 2,
-      credits: 6.00,
-      type: "З",
-      grade: 10
-    },
-    {
-      id: 11,
-      code: "F23L1S146",
-      subject: "Основи на Веб дизајн",
-      session: "2024 (Летна) Втора испитна сесија",
-      date: "24.06.2024",
-      semester: 2,
-      credits: 6.00,
-      type: "З",
-      grade: 10
-    },
-    {
-      id: 12,
-      code: "F23L2W100",
-      subject: "Економија за ИКТ инженери",
-      session: "2025 (Зимска) Прва испитна сесија",
-      date: "03.02.2025",
-      semester: 3,
-      credits: 6.00,
-      type: "З",
-      grade: 8
-    },
-    {
-      id: 13,
-      code: "F23L2W109",
-      subject: "Интернет програмирање на клиентска страна",
-      session: "2025 (Зимска) Прва испитна сесија",
-      date: "30.01.2025",
-      semester: 3,
-      credits: 6.00,
-      type: "И",
-      grade: 10
-    },
-    {
-      id: 14,
-      code: "F23L2W014",
-      subject: "Компјутерски мрежи и безбедност",
-      session: "2025 (Зимска) Прва испитна сесија",
-      date: "10.02.2025",
-      semester: 3,
-      credits: 6.00,
-      type: "З",
-      grade: 7
-    },
-    {
-      id: 15,
-      code: "F23L2W201",
-      subject: "Примена на алгоритми и податочни структури",
-      session: "2025 (Зимска) Прва испитна сесија",
-      date: "13.02.2025",
-      semester: 3,
-      credits: 6.00,
-      type: "З",
-      grade: 10
-    },
-    {
-      id: 16,
-      code: "F23L2W167",
-      subject: "Шаблони за дизајн на кориснички интерфејси",
-      session: "2025 (Зимска) Прва испитна сесија",
-      date: "06.02.2025",
-      semester: 3,
-      credits: 6.00,
-      type: "И",
-      grade: 10
-    },
-    {
-      id: 17,
-      code: "F23L2S026",
-      subject: "Маркетинг",
-      session: "2025 (Летна) Втора испитна сесија",
-      date: "12.06.2025",
-      semester: 4,
-      credits: 6.00,
-      type: "З",
-      grade: 8
-    },
-    {
-      id: 18,
-      code: "F23L2S017",
-      subject: "Оперативни системи",
-      session: "2025 (Летна) Втора испитна сесија",
-      date: "19.06.2025",
-      semester: 4,
-      credits: 6.00,
-      type: "З",
-      grade: 7
-    },
-    {
-      id: 19,
-      code: "F23L2S029",
-      subject: "Софтверско инженерство",
-      session: "2025 (Летна) Втора испитна сесија",
-      date: "23.06.2025",
-      semester: 4,
-      credits: 6.00,
-      type: "З",
-      grade: 8
-    }
-  ];
+  useEffect(() => {
+    let cancelled = false;
 
-  const getGradeColor = (grade: number | string) => {
-    if (grade === "Реализиран") return "bg-blue-100 text-blue-800 border-blue-200";
-    if (typeof grade === "number") {
-      if (grade >= 9) return "bg-green-100 text-green-800 border-green-200";
-      if (grade >= 8) return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      if (grade >= 6) return "bg-orange-100 text-orange-800 border-orange-200";
-      return "bg-red-100 text-red-800 border-red-200";
+    async function load() {
+      setIsLoading(true);
+      setErrorMessage(null);
+
+      const token = getAccessToken();
+      if (!token) {
+        setErrorMessage('Not authenticated. Please login again.');
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:5147/api/user/getPassedSubjects', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const text = await response.text().catch(() => '');
+          throw new Error(text || `Failed to load passed subjects (${response.status})`);
+        }
+
+        const data = (await response.json()) as PassedSubjectsResponse;
+        const rows: ExamRow[] = (data?.passedSubjects ?? []).map((s) => ({
+          id: s.id,
+          code: s.code,
+          subject: s.subject,
+          date: s.date,
+          semester: s.semester,
+          credits: s.credits,
+          grade: s.grade,
+        }));
+
+        if (!cancelled) setExams(rows);
+      } catch (err) {
+        if (!cancelled) {
+          setErrorMessage(err instanceof Error ? err.message : 'Failed to load passed subjects.');
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
     }
-    return "bg-gray-100 text-gray-800 border-gray-200";
+
+    void load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const stats = useMemo(() => {
+    const passed = exams.length;
+    const creditsCurrent = exams.reduce((sum, s) => sum + (typeof s.credits === 'number' ? s.credits : 0), 0);
+    const numericGrades = exams.map((e) => (typeof e.grade === 'number' ? e.grade : null)).filter((g): g is number => g !== null);
+    const average =
+      numericGrades.length > 0
+        ? numericGrades.reduce((sum, g) => sum + g, 0) / numericGrades.length
+        : 0;
+
+    const totalCredits = 240;
+    const totalExams = 40;
+    return {
+      average: Number.isFinite(average) ? Number(average.toFixed(2)) : 0,
+      credits: { current: creditsCurrent, total: totalCredits },
+      passed,
+      remaining: Math.max(0, totalExams - passed),
+    };
+  }, [exams]);
+
+  const getGradeColor = (grade: number) => {
+    if (grade >= 9) return "bg-green-100 text-green-800 border-green-200";
+    if (grade >= 8) return "bg-yellow-100 text-yellow-800 border-yellow-200";
+    if (grade >= 6) return "bg-orange-100 text-orange-800 border-orange-200";
+    return "bg-red-100 text-red-800 border-red-200";
   };
 
   const handleSortByGrade = () => {
@@ -274,16 +156,7 @@ const Exams = () => {
     
     return [...exams].sort((a, b) => {
       if (sortField === 'grade') {
-        // Handle "Реализиран" grade separately
-        if (a.grade === "Реализиран" && b.grade === "Реализиран") return 0;
-        if (a.grade === "Реализиран") return sortOrder === 'asc' ? -1 : 1;
-        if (b.grade === "Реализиран") return sortOrder === 'asc' ? 1 : -1;
-        
-        // Handle numeric grades
-        const gradeA = typeof a.grade === 'number' ? a.grade : 0;
-        const gradeB = typeof b.grade === 'number' ? b.grade : 0;
-        
-        return sortOrder === 'asc' ? gradeA - gradeB : gradeB - gradeA;
+        return sortOrder === 'asc' ? a.grade - b.grade : b.grade - a.grade;
       }
       
       if (sortField === 'date') {
@@ -306,7 +179,25 @@ const Exams = () => {
     return faSort;
   };
 
-  const creditsPercentage = (stats.credits.current / stats.credits.total) * 100;
+  const creditsPercentage = stats.credits.total > 0 ? (stats.credits.current / stats.credits.total) * 100 : 0;
+
+  if (isLoading) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        Loading...
+      </div>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {errorMessage}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
