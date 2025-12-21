@@ -191,7 +191,7 @@ export default function SubjectsPage() {
       }
 
       try {
-        const response = await fetch('http://localhost:5147/api/user/getSubjects', {
+        const response = await fetch('https://iknow-api.onrender.com/api/user/getSubjects', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

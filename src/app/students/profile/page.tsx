@@ -145,7 +145,7 @@ export default function ProfilePage() {
       }
 
       try {
-        const response = await fetch('http://localhost:5147/api/user/getUser', {
+        const response = await fetch('https://iknow-api.onrender.com/api/user/getUser', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

@@ -53,7 +53,7 @@ const Exams = () => {
       }
 
       try {
-        const response = await fetch('http://localhost:5147/api/user/getPassedSubjects', {
+        const response = await fetch('https://iknow-api.onrender.com/api/user/getPassedSubjects', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

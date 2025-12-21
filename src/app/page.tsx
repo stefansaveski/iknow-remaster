@@ -48,11 +48,36 @@ export default function LoginPage() {
       <div className="min-h-screen ">
         {/* Login Form */}
         <div className="flex items-center justify-center min-h-[calc(100vh-160px)] p-4">
-          <div className="w-full max-w-md">
-            {/* Login Card */}
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-            {/* Header */}
-            <div className="bg-primary text-white px-8 py-6 text-center">
+          <div className="w-full max-w-5xl">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-[24rem_28rem_24rem] lg:items-start lg:justify-center">
+              {/* Sticky Notes */}
+              <div className="w-full flex flex-col gap-4">
+                <div className="bg-yellow-100 border border-yellow-200 rounded-xl shadow-sm p-5">
+                  <div className="text-sm font-bold text-gray-900 mb-2">Login for Student</div>
+                  <div className="text-xs text-gray-800 whitespace-pre-wrap font-mono">
+                    {`"email":"boris@example.com",
+"password":"your-password-here",`}
+                  </div>
+                  <div className="mt-3 text-xs text-gray-700">
+                    may take up to 30 seconds afte long inactivity
+                  </div>
+                </div>
+
+                <div className="bg-yellow-100 border border-yellow-200 rounded-xl shadow-sm p-5">
+                  <div className="text-sm font-bold text-gray-900 mb-2">Login for Professor</div>
+                  <div className="text-xs text-gray-800 whitespace-pre-wrap font-mono">
+                    {`"email":"andonov@gmail.com",
+"password":"123lol456",`}
+                  </div>
+                </div>
+              </div>
+
+              {/* Login Card Column */}
+              <div className="w-full max-w-md lg:max-w-none lg:w-[28rem] mx-auto">
+                {/* Login Card */}
+                <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                {/* Header */}
+                <div className="bg-primary text-white px-8 py-6 text-center">
               <div className="mb-4">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-white bg-opacity-20 rounded-full">
                   <FontAwesomeIcon icon={faUser} className="text-2xl text-primary" />
@@ -169,20 +194,25 @@ export default function LoginPage() {
                 </button>
               </p>
             </div>
-          </div>
+                </div>
 
-          {/* Additional Info */}
-          <div className="mt-6 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white bg-opacity-80 rounded-lg shadow-sm">
-              <FontAwesomeIcon icon={faGraduationCap} className="text-primary" />
-              <span className="text-sm text-gray-600">
-                Студентски информационен систем
-              </span>
+                {/* Additional Info */}
+                <div className="mt-6 text-center">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-white bg-opacity-80 rounded-lg shadow-sm">
+                    <FontAwesomeIcon icon={faGraduationCap} className="text-primary" />
+                    <span className="text-sm text-gray-600">
+                      Студентски информационен систем
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right spacer column (keeps login centered) */}
+              <div className="hidden lg:block" />
             </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }
