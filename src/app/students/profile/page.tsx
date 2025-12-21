@@ -16,9 +16,76 @@ import {
   faMapMarkerAlt,
   faPassport
 } from '@fortawesome/free-solid-svg-icons';
-import studentData from '@/data/student-profile.json';
-
+import { useEffect, useState } from 'react';
+import { getAccessToken } from '@/lib/auth';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+
+type PersonalInfo = {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  maidenName: string;
+  dateOfBirth: string;
+  gender: string;
+  nationality: string;
+  citizenship: string;
+  scholarship: string;
+  currentPlan: string;
+  registryNumber: string;
+  studyGroup: string;
+  notes?: string;
+  index: string;
+  embg: string;
+};
+
+type BirthInfo = {
+  placeOfBirth: string;
+  municipalityOfBirth: string;
+  country: string;
+};
+
+type PreviousEducation = {
+  type: string;
+  profession: string;
+  average: string | number;
+  language: string;
+  country: string;
+  previousUniversity: string;
+  previousFaculty: string;
+  previousStudyMode: string;
+};
+
+type EnrollmentInfo = {
+  enrollmentYear: string | number;
+  status: string;
+  cycle: string;
+  program: string;
+  quota: string;
+  secondaryEducationNumber: string;
+  previousEducationCredits: string | number;
+};
+
+type Contact = {
+  placeOfResidence: string;
+  municipalityOfResidence: string;
+  country: string;
+  address: string;
+  temporaryAddress: string;
+  phone: string;
+  mobilePhone: string;
+  passportNumber: string;
+  passportExpiryDate: string;
+  email: string;
+  microsoftEmail: string;
+};
+
+type StudentProfile = {
+  personalInfo: PersonalInfo;
+  birthInfo: BirthInfo;
+  previousEducation: PreviousEducation;
+  enrollmentInfo: EnrollmentInfo;
+  contact: Contact;
+};
 
 interface InfoRowProps {
   label: string;
@@ -59,6 +126,75 @@ const Section = ({ title, icon, children }: SectionProps) => (
 );
 
 export default function ProfilePage() {
+  const [studentData, setStudentData] = useState<StudentProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      setIsLoading(true);
+      setErrorMessage(null);
+
+      const token = getAccessToken();
+      if (!token) {
+        setErrorMessage('Not authenticated. Please login again.');
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:5147/api/user/getUser', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const text = await response.text().catch(() => '');
+          throw new Error(text || `Failed to load profile (${response.status})`);
+        }
+
+        const data = (await response.json()) as StudentProfile;
+        if (!cancelled) setStudentData(data);
+      } catch (err) {
+        if (!cancelled) {
+          setErrorMessage(err instanceof Error ? err.message : 'Failed to load profile.');
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+
+    void load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen pb-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          Loading...
+        </div>
+      </div>
+    );
+  }
+
+  if (errorMessage || !studentData) {
+    return (
+      <div className="min-h-screen pb-8">
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {errorMessage ?? 'Failed to load profile.'}
+        </div>
+      </div>
+    );
+  }
+
   const { personalInfo, birthInfo, previousEducation, enrollmentInfo, contact } = studentData;
 
   return (

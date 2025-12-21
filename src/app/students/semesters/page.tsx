@@ -11,7 +11,35 @@ import {
   faCheckCircle,
   faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
-import semestersData from '@/data/semesters.json';
+import { useEffect, useState } from 'react';
+import { getAccessToken } from '@/lib/auth';
+
+type Semester = {
+  id: number | string;
+  semester: string;
+  direction: string;
+  quota: string;
+  note: string;
+  studentCom: string;
+  sum: string;
+  paid: string;
+  ukim: string;
+  createdOn: string;
+  dateChanged: string;
+  credits: string;
+  type: string;
+  doc: string;
+  doc1: string;
+  verified: string;
+  taxes: string;
+  signatures: string;
+  status: string;
+  completed: string;
+};
+
+type SemestersResponse = {
+  semesters: Semester[];
+};
 
 interface TableCellProps {
   children: React.ReactNode;
@@ -80,7 +108,74 @@ const SignatureBadge = ({ signatures }: { signatures: string }) => {
 };
 
 export default function SemestersPage() {
-  const { semesters } = semestersData;
+  const [semesters, setSemesters] = useState<Semester[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      setIsLoading(true);
+      setErrorMessage(null);
+
+      const token = getAccessToken();
+      if (!token) {
+        setErrorMessage('Not authenticated. Please login again.');
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:5147/api/user/getSemesters', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const text = await response.text().catch(() => '');
+          throw new Error(text || `Failed to load semesters (${response.status})`);
+        }
+
+        const data = (await response.json()) as SemestersResponse;
+        if (!cancelled) setSemesters(Array.isArray(data?.semesters) ? data.semesters : []);
+      } catch (err) {
+        if (!cancelled) {
+          setErrorMessage(err instanceof Error ? err.message : 'Failed to load semesters.');
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+
+    void load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen pb-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          Loading...
+        </div>
+      </div>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <div className="min-h-screen pb-8">
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {errorMessage}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pb-8">
