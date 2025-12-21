@@ -127,7 +127,7 @@ export default function SemestersPage() {
       }
 
       try {
-        const response = await fetch('http://localhost:5147/api/user/getSemesters', {
+        const response = await fetch('https://iknow-api.onrender.com/api/user/getSemesters', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

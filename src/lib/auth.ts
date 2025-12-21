@@ -73,7 +73,7 @@ export function clearAuthTokens() {
 }
 
 export async function login(params: { email: string; password: string }) {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:5147';
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://iknow-api.onrender.com';
 
   const response = await fetch(`${baseUrl}/api/auth/login`, {
     method: 'POST',
