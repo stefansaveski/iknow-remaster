@@ -34,8 +34,8 @@ export default function LoginPage() {
     setErrorMessage(null);
     setIsSubmitting(true);
     try {
-      await login({ email: formData.email, password: formData.password });
-      window.location.href = '/students/profile';
+      const session = await login({ email: formData.email, password: formData.password });
+      window.location.href = session.role === 'Professor' ? '/professor' : '/students';
     } catch (err) {
       setErrorMessage(err instanceof Error ? err.message : 'Login failed.');
     } finally {

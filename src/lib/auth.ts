@@ -3,6 +3,12 @@ export type AuthTokens = {
   refreshToken: string;
 };
 
+export type UserRole = 'Professor' | 'Student' | string;
+
+export type AuthSession = AuthTokens & {
+  role: UserRole;
+};
+
 type StoredToken = {
   value: string;
   expiresAt: number; // epoch ms
@@ -11,6 +17,7 @@ type StoredToken = {
 const STORAGE_KEYS = {
   access: 'iknow.auth.access',
   refresh: 'iknow.auth.refresh',
+  role: 'iknow.auth.role',
 } as const;
 
 const ACCESS_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
@@ -58,6 +65,11 @@ export function setAuthTokens(tokens: AuthTokens) {
   writeStoredToken(STORAGE_KEYS.refresh, tokens.refreshToken, REFRESH_TOKEN_TTL_MS);
 }
 
+export function setUserRole(role: UserRole) {
+  // Keep role TTL aligned with access token TTL.
+  writeStoredToken(STORAGE_KEYS.role, role, ACCESS_TOKEN_TTL_MS);
+}
+
 export function getAccessToken(): string | null {
   return readStoredToken(STORAGE_KEYS.access)?.value ?? null;
 }
@@ -66,13 +78,18 @@ export function getRefreshToken(): string | null {
   return readStoredToken(STORAGE_KEYS.refresh)?.value ?? null;
 }
 
+export function getUserRole(): UserRole | null {
+  return readStoredToken(STORAGE_KEYS.role)?.value ?? null;
+}
+
 export function clearAuthTokens() {
   if (!isBrowser()) return;
   window.localStorage.removeItem(STORAGE_KEYS.access);
   window.localStorage.removeItem(STORAGE_KEYS.refresh);
+  window.localStorage.removeItem(STORAGE_KEYS.role);
 }
 
-export async function login(params: { email: string; password: string }) {
+export async function login(params: { email: string; password: string }): Promise<AuthSession> {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://iknow-api.onrender.com';
 
   const response = await fetch(`${baseUrl}/api/auth/login`, {
@@ -99,17 +116,26 @@ export async function login(params: { email: string; password: string }) {
   }
 
   const data = (await response.json()) as {
-    token?: { accessToken?: string; refreshToken?: string };
+    token?: string;
+    refreshToken?: string;
+    role?: string;
   };
 
-  const accessToken = data?.token?.accessToken;
-  const refreshToken = data?.token?.refreshToken;
+  const accessToken = data?.token;
+  const refreshToken = data?.refreshToken;
+  const role = data?.role;
 
   if (!accessToken || !refreshToken) {
     throw new Error('Login response did not contain tokens.');
   }
 
-  const tokens: AuthTokens = { accessToken, refreshToken };
-  setAuthTokens(tokens);
-  return tokens;
+  const session: AuthSession = {
+    accessToken,
+    refreshToken,
+    role: role ?? 'Student',
+  };
+
+  setAuthTokens(session);
+  setUserRole(session.role);
+  return session;
 }
