@@ -8,6 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { getAccessToken } from '@/lib/auth';
+import { useTranslation } from 'react-i18next';
 
 interface Subject {
   id: number;
@@ -146,25 +147,24 @@ const TableCell = ({ children, className = "" }: TableCellProps) => (
 );
 
 const StatusBadge = ({ status }: { status: string }) => {
+  const { t } = useTranslation();
   const baseClasses = "px-3 py-1 rounded-md text-xs font-medium";
-  
-  if (status === "Зад.") {
+  if (status === t('mandatory_short')) {
     return (
       <span className={`${baseClasses} bg-blue-100 text-blue-800`}>
-        {status}
+        {t('mandatory_short')}
       </span>
     );
-  } else if (status === "Изб.") {
+  } else if (status === t('elective_short')) {
     return (
       <span className={`${baseClasses} bg-green-100 text-green-800`}>
-        {status}
+        {t('elective_short')}
       </span>
     );
   }
-  
   return (
     <span className={`${baseClasses} bg-gray-100 text-gray-800`}>
-      {status}
+      {t(status) || status}
     </span>
   );
 };
@@ -175,6 +175,7 @@ export default function SubjectsPage() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     let cancelled = false;
@@ -274,7 +275,7 @@ export default function SubjectsPage() {
     return (
       <div className="min-h-screen pb-8">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          Loading...
+          {t('loading')}
         </div>
       </div>
     );
@@ -284,7 +285,7 @@ export default function SubjectsPage() {
     return (
       <div className="min-h-screen pb-8">
         <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {errorMessage ?? 'Failed to load subjects.'}
+          {errorMessage ?? t('failed_to_load_subjects')}
         </div>
       </div>
     );
@@ -307,9 +308,9 @@ export default function SubjectsPage() {
             <FontAwesomeIcon icon={faBook} className="text-3xl text-primary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold mb-2">Предмети</h1>
+            <h1 className="text-3xl font-bold mb-2">{t('subjects')}</h1>
             <p className="text-lg opacity-90">
-              Преглед на запишани предмети по семестри
+              {t('subjects_overview')}
             </p>
           </div>
         </div>
@@ -324,22 +325,22 @@ export default function SubjectsPage() {
           {/* Status Card */}
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="text-sm text-gray-600 mb-2">
-              Статус: <span className="text-primary font-semibold">Запишан од студент</span>
+              {t('status')}: <span className="text-primary font-semibold">{t('enrolled_by_student')}</span>
             </div>
             <div className="text-sm text-gray-600">
-              Број на тикет: <span className="font-semibold">{currentSemester.ticketNumber}</span>
+              {t('ticket_number')}: <span className="font-semibold">{currentSemester.ticketNumber}</span>
             </div>
           </div>
 
           {/* Semester Selection */}
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="text-sm text-gray-600 mb-2">
-              Долг од документи: <span className="font-semibold">{currentSemester.debt}</span>
+              {t('debt_from_documents')}: <span className="font-semibold">{currentSemester.debt}</span>
             </div>
             
             <div className="relative mt-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Избери семестар:
+                {t('select_semester')}:
               </label>
               <div className="relative">
                 <button
@@ -369,7 +370,7 @@ export default function SubjectsPage() {
                         className="w-full px-4 py-3 text-left text-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
                       >
                         <div className="font-medium text-gray-900">{semester.name}</div>
-                        <div className="text-xs text-gray-500">Статус: {semester.status}</div>
+                        <div className="text-xs text-gray-500">{t('status')}: {semester.status}</div>
                       </button>
                     ))}
                   </div>
@@ -379,7 +380,7 @@ export default function SubjectsPage() {
 
             <div className="mt-4 text-sm">
               <div className="text-primary font-medium">
-                Сериски број: {currentSemesterData.serviceNumber}
+                {t('serial_number')}: {currentSemesterData.serviceNumber}
               </div>
             </div>
           </div>
@@ -388,7 +389,7 @@ export default function SubjectsPage() {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <FontAwesomeIcon icon={faBook} className="w-4 h-4 text-primary" />
-              Запишани предмети
+              {t('enrolled_subjects')}
             </h3>
             <div className="text-3xl font-bold text-primary">
               {currentSubjects.length}
@@ -402,7 +403,7 @@ export default function SubjectsPage() {
             <div className="bg-primary text-white px-6 py-4">
               <h2 className="text-xl font-bold flex items-center gap-2">
                 <FontAwesomeIcon icon={faFileInvoice} />
-                Финансиски информации
+                {t('financial_info')}
               </h2>
             </div>
             
@@ -412,47 +413,47 @@ export default function SubjectsPage() {
                 {/* Left Financial Column */}
                 <div className="space-y-4">
                   <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Сума:</span>
+                    <span className="text-gray-600">{t('sum')}:</span>
                     <span className="font-semibold text-primary">{currentSemester.financialInfo.sum}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Платено:</span>
+                    <span className="text-gray-600">{t('paid')}:</span>
                     <span className="font-semibold text-green-600">{currentSemester.financialInfo.paid}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Должи:</span>
+                    <span className="text-gray-600">{t('due')}:</span>
                     <span className="font-semibold text-red-600">{currentSemester.financialInfo.due}</span>
                   </div>
                   <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                    <div className="text-sm font-medium text-blue-800 mb-1">Материјални трошоци:</div>
-                    <div className="text-sm text-blue-700">{currentSemester.financialInfo.materialCosts}</div>
+                    <div className="text-sm font-medium text-blue-800 mb-1">{t('material_costs')}:</div>
+                    <div className="text-sm text-blue-700">{t('material_costs_info')}</div>
                   </div>
                 </div>
 
                 {/* Right Financial Column */}
                 <div className="space-y-4">
                   <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Кредити:</span>
+                    <span className="text-gray-600">{t('credits')}:</span>
                     <span className="font-semibold text-primary">{currentSemester.financialInfo.credits}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">МКСА:</span>
+                    <span className="text-gray-600">{t('mksa')}:</span>
                     <span className="font-semibold">{currentSemester.financialInfo.MKSA}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Електронско запишување:</span>
+                    <span className="text-gray-600">{t('electronic_registration')}:</span>
                     <span className="font-semibold">{currentSemester.financialInfo.electronicRegistration}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Е-УКИМ:</span>
+                    <span className="text-gray-600">{t('eukim')}:</span>
                     <span className="font-semibold">{currentSemester.financialInfo.eUKIM}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Банкарска провизија:</span>
+                    <span className="text-gray-600">{t('bank_provision')}:</span>
                     <span className="font-semibold">{currentSemester.financialInfo.bankProvision}</span>
                   </div>
                   <div className="flex justify-between items-center py-3 border-t-2 border-primary bg-primary bg-opacity-5 rounded-lg px-4">
-                    <span className="font-bold text-white">Тотал:</span>
+                    <span className="font-bold text-white">{t('total')}:</span>
                     <span className="font-bold text-xl text-white">{currentSemester.financialInfo.total}</span>
                   </div>
                 </div>
@@ -465,7 +466,7 @@ export default function SubjectsPage() {
       {/* Subjects Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="bg-primary text-white px-6 py-4">
-          <h2 className="text-xl font-bold">Листа на предмети</h2>
+          <h2 className="text-xl font-bold">{t('subjects_list')}</h2>
         </div>
         
         <div className="overflow-x-auto">
@@ -473,15 +474,15 @@ export default function SubjectsPage() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Код</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Часови</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Кој пат</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Предмет</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Семестар</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Потпис</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Група</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Професор</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('code')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('hours')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('which_time')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('subject')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('semester')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('status')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('signature')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('group')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('professor')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -494,25 +495,25 @@ export default function SubjectsPage() {
                   <TableCell className="font-medium text-gray-900 max-w-xs">
                     <div className="flex items-center gap-2">
                       <FontAwesomeIcon icon={faBook} className="w-4 h-4 text-primary" />
-                      {subject.name}
+                      {t(subject.name, subject.name)}
                     </div>
                   </TableCell>
-                  <TableCell className="text-center font-medium text-primary">{subject.semester}</TableCell>
+                  <TableCell className="text-center font-medium text-primary">{t(subject.semester.toString(), subject.semester.toString())}</TableCell>
                   <TableCell>
                     <StatusBadge status={subject.status} />
                   </TableCell>
                   <TableCell className="text-center">
-                    {subject.signature || (
+                    {subject.signature ? t(subject.signature, subject.signature) : (
                       <span className="text-gray-400">—</span>
                     )}
                   </TableCell>
                   <TableCell className="text-center">
-                    {subject.group || (
+                    {subject.group ? t(subject.group, subject.group) : (
                       <span className="text-gray-400">—</span>
                     )}
                   </TableCell>
                   <TableCell>
-                    {subject.professor || (
+                    {subject.professor ? t(subject.professor, subject.professor) : (
                       <span className="text-gray-400">—</span>
                     )}
                   </TableCell>

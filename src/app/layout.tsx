@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+"use client";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../i18n';
 
-// Prevent FontAwesome from adding CSS automatically
 config.autoAddCss = false;
 
 const geistSans = Geist({
@@ -17,11 +18,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "IKnow - Student Portal",
-  description: "Student portal for Ss. Cyril and Methodius University",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,10 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className="mx-auto max-w-6xl px-4">{children}</div>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <I18nextProvider i18n={i18n}>
+          <div className="mx-auto max-w-6xl px-4">{children}</div>
+        </I18nextProvider>
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 type UsersBySubject = {
   Id?: string;
@@ -35,6 +36,7 @@ function toInt(value: string): number | null {
 }
 
 export default function ProfessorStudentsPage() {
+  const { t } = useTranslation();
   const [subjects, setSubjects] = useState<SubjectsAndUsers[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -128,37 +130,38 @@ export default function ProfessorStudentsPage() {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Professor • Students</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">{t('prof_students_title')}</h1>
           <p className="text-gray-700 mt-1">
-            Data comes from <span className="font-mono">/api/prof/students</span> (demo store).
+            {t('prof_students_data_note')} <span className="font-mono">/api/prof/students</span> (demo store).
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex flex-col">
-            <label className="text-sm text-gray-700">Filter by subject</label>
+            <label className="text-sm text-gray-700">{t('filter_by_subject')}</label>
             <select
               className="border border-gray-300 rounded-lg px-3 py-2"
               value={subjectFilter}
               onChange={(e) => setSubjectFilter(e.target.value)}
             >
-              <option value="all">All subjects</option>
+              <option value="all">{t('all_subjects')}</option>
               {subjects
                 .filter((s) => typeof s.Id === "number")
                 .map((s) => (
                   <option key={String(s.Id)} value={String(s.Id)}>
-                    {s.Name ?? `Subject ${s.Id}`}
+                    {s.Name ?? `${t('subject')} ${s.Id}`}
                   </option>
                 ))}
             </select>
           </div>
 
           <div className="flex flex-col">
-            <label className="text-sm text-gray-700">Find student by index / ID</label>
+            <label className="text-sm text-gray-700">{t('find_student_by_id')}</label>
             <input
               className="border border-gray-300 rounded-lg px-3 py-2"
-              placeholder="e.g. 20001"
+              placeholder={t('student_id_placeholder')}
               value={studentIdQuery}
               onChange={(e) => setStudentIdQuery(e.target.value)}
             />
@@ -176,24 +179,24 @@ export default function ProfessorStudentsPage() {
         <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
           <thead className="bg-gray-50">
             <tr>
-              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">Student</th>
-              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">ID</th>
-              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">Subject</th>
-              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">Grade</th>
-              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">Actions</th>
+              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">{t('student')}</th>
+              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">{t('id')}</th>
+              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">{t('subject')}</th>
+              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">{t('grade')}</th>
+              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">{t('actions')}</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
                 <td className="px-4 py-4 text-gray-700" colSpan={5}>
-                  Loading...
+                  {t('loading')}
                 </td>
               </tr>
             ) : filteredRows.length === 0 ? (
               <tr>
                 <td className="px-4 py-4 text-gray-700" colSpan={5}>
-                  No students found.
+                  {t('no_students_found')}
                 </td>
               </tr>
             ) : (
@@ -226,7 +229,7 @@ export default function ProfessorStudentsPage() {
                           ))}
                         </select>
                         <span className="text-sm text-gray-600">
-                          Current: {r.grade > 0 ? r.grade : "—"}
+                          {t('current')}: {r.grade > 0 ? r.grade : t('none')}
                         </span>
                       </div>
                     </td>
@@ -244,7 +247,7 @@ export default function ProfessorStudentsPage() {
                             );
                           }}
                         >
-                          Add grade
+                          {t('add_grade')}
                         </button>
 
                         <button
@@ -259,7 +262,7 @@ export default function ProfessorStudentsPage() {
                             );
                           }}
                         >
-                          Edit grade
+                          {t('edit_grade')}
                         </button>
 
                         <button
@@ -274,7 +277,7 @@ export default function ProfessorStudentsPage() {
                             );
                           }}
                         >
-                          Remove grade
+                          {t('remove_grade')}
                         </button>
                       </div>
                     </td>
