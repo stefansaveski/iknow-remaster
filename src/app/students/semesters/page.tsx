@@ -13,6 +13,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { getAccessToken } from '@/lib/auth';
+import { useTranslation } from 'react-i18next';
 
 type Semester = {
   id: number | string;
@@ -53,32 +54,32 @@ const TableCell = ({ children, className = "" }: TableCellProps) => (
 );
 
 const StatusBadge = ({ status }: { status: string }) => {
+  const { t } = useTranslation();
   const baseClasses = "px-2 py-1 rounded-full text-xs font-medium";
-  
-  if (status === "валиден") {
+  if (status === t('valid')) {
     return (
       <span className={`${baseClasses} bg-green-100 text-green-800 flex items-center gap-1`}>
         <FontAwesomeIcon icon={faCheckCircle} className="w-3 h-3" />
-        {status}
+        {t('valid')}
       </span>
     );
   }
-  
   return (
     <span className={`${baseClasses} bg-gray-100 text-gray-800`}>
-      {status}
+      {t(status) || status}
     </span>
   );
 };
 
 const YesNoBadge = ({ value }: { value: string }) => {
-  if (value === "Да") {
+  const { t } = useTranslation();
+  if (value === t('yes')) {
     return (
       <span className="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">
         <FontAwesomeIcon icon={faCheck} className="w-3 h-3" />
       </span>
     );
-  } else if (value === "Не") {
+  } else if (value === t('no')) {
     return (
       <span className="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">
         <FontAwesomeIcon icon={faTimes} className="w-3 h-3" />
@@ -111,6 +112,7 @@ export default function SemestersPage() {
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     let cancelled = false;
@@ -161,7 +163,7 @@ export default function SemestersPage() {
     return (
       <div className="min-h-screen pb-8">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          Loading...
+          {t('loading')}
         </div>
       </div>
     );
@@ -186,9 +188,9 @@ export default function SemestersPage() {
             <FontAwesomeIcon icon={faCalendarAlt} className="text-3xl text-primary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold mb-2">Семестри</h1>
+            <h1 className="text-3xl font-bold mb-2">{t('semesters')}</h1>
             <p className="text-lg opacity-90">
-              Преглед на сите запишани семестри и нивниот статус
+              {t('semesters_overview')}
             </p>
           </div>
         </div>
@@ -197,7 +199,7 @@ export default function SemestersPage() {
       {/* Table Container */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="bg-primary text-white px-6 py-4">
-          <h2 className="text-xl font-bold">Листа на семестри</h2>
+          <h2 className="text-xl font-bold">{t('semesters_list')}</h2>
         </div>
         
         <div className="overflow-x-auto">
@@ -205,25 +207,25 @@ export default function SemestersPage() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Семестар</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Насока</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Квота</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Забелешка</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Студ.Ком.</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Сума</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Платено</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">УКИМ</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Креирано на</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Датум промена</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ц.Кр</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Тип</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Док.</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Док1.</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Вериф.</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Таксени</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Потписи</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Зав.</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('semester')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('direction')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('quota')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('note')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('student_com')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('sum')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('paid')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('ukim')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('created_on')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('date_changed')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('credits')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('type')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('doc')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('doc1')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('verified')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('taxes')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('signatures')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('status')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('completed')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -334,7 +336,7 @@ export default function SemestersPage() {
               <FontAwesomeIcon icon={faCheckCircle} className="text-xl" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Завршени семестри</h3>
+              <h3 className="text-lg font-bold text-gray-900">{t('completed_semesters')}</h3>
               <p className="text-2xl font-bold text-green-600">
                 {semesters.filter(s => s.completed !== "Не").length}
               </p>
@@ -348,7 +350,7 @@ export default function SemestersPage() {
               <FontAwesomeIcon icon={faFileAlt} className="text-xl" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Верифицирани</h3>
+              <h3 className="text-lg font-bold text-gray-900">{t('verified_semesters')}</h3>
               <p className="text-2xl font-bold text-blue-600">
                 {semesters.filter(s => s.verified === "Да").length}
               </p>
@@ -362,7 +364,7 @@ export default function SemestersPage() {
               <FontAwesomeIcon icon={faCalendarAlt} className="text-xl" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Вкупно семестри</h3>
+              <h3 className="text-lg font-bold text-gray-900">{t('total_semesters')}</h3>
               <p className="text-2xl font-bold text-primary">
                 {semesters.length}
               </p>

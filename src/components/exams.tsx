@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { getAccessToken } from '@/lib/auth';
@@ -32,6 +33,7 @@ type ExamRow = {
 };
 
 const Exams = () => {
+  const { t } = useTranslation();
   const [sortField, setSortField] = useState<'grade' | 'date' | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null);
   const [exams, setExams] = useState<ExamRow[]>([]);
@@ -184,7 +186,7 @@ const Exams = () => {
   if (isLoading) {
     return (
       <div className="bg-white rounded-lg shadow-sm p-6">
-        Loading...
+        {t('loading', 'Loading...')}
       </div>
     );
   }
@@ -193,7 +195,7 @@ const Exams = () => {
     return (
       <div className="bg-white rounded-lg shadow-sm p-6">
         <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {errorMessage}
+          {t('failed_to_load_exams', errorMessage)}
         </div>
       </div>
     );
@@ -207,7 +209,7 @@ const Exams = () => {
           {/* Average Grade */}
           <div className="text-center">
             <div className="text-3xl font-bold text-gray-900">{stats.average}</div>
-            <div className="text-sm text-gray-500 mt-1">Просек</div>
+            <div className="text-sm text-gray-500 mt-1">{t('average', 'Просек')}</div>
           </div>
 
           {/* Credits */}
@@ -216,25 +218,25 @@ const Exams = () => {
               {stats.credits.current}
               <span className="text-lg text-gray-400">/{stats.credits.total}</span>
             </div>
-            <div className="text-sm text-gray-500 mt-1">Кредити</div>
+            <div className="text-sm text-gray-500 mt-1">{t('credits', 'Кредити')}</div>
           </div>
 
           {/* Passed Exams */}
           <div className="text-center">
             <div className="text-3xl font-bold text-gray-900">{stats.passed}</div>
-            <div className="text-sm text-gray-500 mt-1">Положени</div>
+            <div className="text-sm text-gray-500 mt-1">{t('passed', 'Положени')}</div>
           </div>
 
           {/* Remaining Exams */}
           <div className="text-center">
             <div className="text-3xl font-bold text-gray-900">{stats.remaining}</div>
-            <div className="text-sm text-gray-500 mt-1">Останато</div>
+            <div className="text-sm text-gray-500 mt-1">{t('remaining', 'Останато')}</div>
           </div>
         </div>
-        
+
         {/* Progress Bar spanning entire statistics section */}
         <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
+          <div
             className="bg-blue-500 h-2 rounded-full transition-all duration-300"
             style={{ width: `${creditsPercentage}%` }}
           ></div>
@@ -243,24 +245,24 @@ const Exams = () => {
 
       {/* Exams Table */}
       <div>
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">Испити</h3>
-        
+        <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('exams', 'Испити')}</h3>
+
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead>
               <tr className="border-b border-gray-200">
                 <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">#</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Предмет</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Семестар</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Кредити</th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">{t('subject', 'Предмет')}</th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">{t('semester', 'Семестар')}</th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">{t('credits', 'Кредити')}</th>
                 <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">
-                  <button 
+                  <button
                     onClick={handleSortByDate}
                     className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 transform hover:scale-105"
                   >
-                    Датум
-                    <FontAwesomeIcon 
-                      icon={getSortIcon('date')} 
+                    {t('date', 'Датум')}
+                    <FontAwesomeIcon
+                      icon={getSortIcon('date')}
                       className={`text-xs transition-colors duration-200 ${
                         sortField === 'date' ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'
                       }`}
@@ -268,13 +270,13 @@ const Exams = () => {
                   </button>
                 </th>
                 <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">
-                  <button 
+                  <button
                     onClick={handleSortByGrade}
                     className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 transform hover:scale-105"
                   >
-                    Оценка
-                    <FontAwesomeIcon 
-                      icon={getSortIcon('grade')} 
+                    {t('grade', 'Оценка')}
+                    <FontAwesomeIcon
+                      icon={getSortIcon('grade')}
                       className={`text-xs transition-colors duration-200 ${
                         sortField === 'grade' ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'
                       }`}

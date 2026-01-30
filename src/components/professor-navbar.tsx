@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUsers, faBars, faTimes, faChalkboardUser } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 const ProfessorNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,9 +13,10 @@ const ProfessorNavbar = () => {
     setIsMenuOpen((v) => !v);
   };
 
+  const { t } = useTranslation();
   const menuItems = [
-    { icon: faUser, label: "Профил", href: "/professor/profile" },
-    { icon: faUsers, label: "Студенти", href: "/professor/students" },
+    { icon: faUser, label: t('profile'), href: "/professor/profile" },
+    { icon: faUsers, label: t('students') || 'Студенти', href: "/professor/students" },
   ];
 
   return (

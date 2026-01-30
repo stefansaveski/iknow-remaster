@@ -17,6 +17,7 @@ import {
 import { useEffect, useState } from "react";
 import { getAccessToken } from "@/lib/auth";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { useTranslation } from 'react-i18next';
 
 type PersonalInfo = {
   firstName: string;
@@ -93,17 +94,20 @@ interface InfoRowProps {
   icon?: IconDefinition;
 }
 
-const InfoRow = ({ label, value, icon }: InfoRowProps) => (
-  <div className="flex justify-between items-center py-3 border-b border-gray-100 last:border-b-0">
-    <div className="flex items-center gap-2 text-gray-600 font-medium">
-      {icon && <FontAwesomeIcon icon={icon} className="w-4 h-4" />}
-      <span>{label}:</span>
+const InfoRow = ({ label, value, icon }: InfoRowProps) => {
+  const { t } = useTranslation();
+  return (
+    <div className="flex justify-between items-center py-3 border-b border-gray-100 last:border-b-0">
+      <div className="flex items-center gap-2 text-gray-600 font-medium">
+        {icon && <FontAwesomeIcon icon={icon} className="w-4 h-4" />}
+        <span>{t(label)}:</span>
+      </div>
+      <div className="text-gray-900 font-semibold text-right max-w-xs break-words">
+        {value || t('n_a')}
+      </div>
     </div>
-    <div className="text-gray-900 font-semibold text-right max-w-xs break-words">
-      {value || "N/A"}
-    </div>
-  </div>
-);
+  );
+};
 
 interface SectionProps {
   title: string;
@@ -111,22 +115,26 @@ interface SectionProps {
   children: React.ReactNode;
 }
 
-const Section = ({ title, icon, children }: SectionProps) => (
-  <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-    <div className="bg-primary text-white px-6 py-4">
-      <div className="flex items-center gap-3">
-        <FontAwesomeIcon icon={icon} className="text-xl" />
-        <h2 className="text-xl font-bold">{title}</h2>
+const Section = ({ title, icon, children }: SectionProps) => {
+  const { t } = useTranslation();
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-primary text-white px-6 py-4">
+        <div className="flex items-center gap-3">
+          <FontAwesomeIcon icon={icon} className="text-xl" />
+          <h2 className="text-xl font-bold">{t(title)}</h2>
+        </div>
       </div>
+      <div className="p-6">{children}</div>
     </div>
-    <div className="p-6">{children}</div>
-  </div>
-);
+  );
+};
 
 export default function ProfessorProfilePage() {
   const [profileData, setProfileData] = useState<StudentProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     let cancelled = false;
@@ -176,7 +184,7 @@ export default function ProfessorProfilePage() {
   if (isLoading) {
     return (
       <div className="min-h-screen pb-8">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">Loading...</div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">{t('loading')}</div>
       </div>
     );
   }
@@ -185,7 +193,7 @@ export default function ProfessorProfilePage() {
     return (
       <div className="min-h-screen pb-8">
         <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {errorMessage ?? "Failed to load profile."}
+          {errorMessage ?? t('failed_to_load_profile')}
         </div>
       </div>
     );
@@ -209,7 +217,7 @@ export default function ProfessorProfilePage() {
               {personalInfo.firstName} {personalInfo.middleName} {personalInfo.lastName}
             </h1>
             <div className="text-lg opacity-90">
-              Индекс: {personalInfo.index} | ЕМБГ: {personalInfo.embg}
+              {t('index')}: {personalInfo.index} | {t('embg')}: {personalInfo.embg}
             </div>
           </div>
         </div>
@@ -218,56 +226,56 @@ export default function ProfessorProfilePage() {
       {/* Profile Sections */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Personal Information */}
-        <Section title="Лични податоци" icon={faIdCard}>
-          <InfoRow label="Име" value={personalInfo.firstName} />
-          <InfoRow label="Средно име" value={personalInfo.middleName} />
-          <InfoRow label="Презиме" value={personalInfo.lastName} />
-          <InfoRow label="Моминско презиме" value={personalInfo.maidenName} />
-          <InfoRow label="Датум на раѓање" value={personalInfo.dateOfBirth} icon={faCalendarAlt} />
+        <Section title="personal_info" icon={faIdCard}>
+          <InfoRow label="first_name" value={personalInfo.firstName} />
+          <InfoRow label="middle_name" value={personalInfo.middleName} />
+          <InfoRow label="last_name" value={personalInfo.lastName} />
+          <InfoRow label="maiden_name" value={personalInfo.maidenName} />
+          <InfoRow label="date_of_birth" value={personalInfo.dateOfBirth} icon={faCalendarAlt} />
           <InfoRow
-            label="Пол"
+            label="gender"
             value={personalInfo.gender}
-            icon={personalInfo.gender === "машки" ? faMars : faVenus}
+            icon={personalInfo.gender === t('male') ? faMars : faVenus}
           />
-          <InfoRow label="Националност" value={personalInfo.nationality} icon={faFlag} />
-          <InfoRow label="Државјанство" value={personalInfo.citizenship} />
-          <InfoRow label="Стипендија" value={personalInfo.scholarship} />
-          <InfoRow label="Тековен план" value={personalInfo.currentPlan} />
-          <InfoRow label="Бр. во матична книга" value={personalInfo.registryNumber} />
-          <InfoRow label="Група на студирање" value={personalInfo.studyGroup} />
+          <InfoRow label="nationality" value={personalInfo.nationality} icon={faFlag} />
+          <InfoRow label="citizenship" value={personalInfo.citizenship} />
+          <InfoRow label="scholarship" value={personalInfo.scholarship} />
+          <InfoRow label="current_plan" value={personalInfo.currentPlan} />
+          <InfoRow label="registry_number" value={personalInfo.registryNumber} />
+          <InfoRow label="study_group" value={personalInfo.studyGroup} />
           {personalInfo.notes && (
             <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-              <div className="text-sm font-medium text-blue-800 mb-1">Забелешка:</div>
+              <div className="text-sm font-medium text-blue-800 mb-1">{t('note')}:</div>
               <div className="text-sm text-blue-700">{personalInfo.notes}</div>
             </div>
           )}
         </Section>
 
         {/* Birth Information */}
-        <Section title="Податоци за раѓање" icon={faMapMarkerAlt}>
-          <InfoRow label="Место на раѓање" value={birthInfo.placeOfBirth} />
-          <InfoRow label="Општина на раѓање" value={birthInfo.municipalityOfBirth} />
-          <InfoRow label="Земја" value={birthInfo.country} />
+        <Section title="birth_info" icon={faMapMarkerAlt}>
+          <InfoRow label="place_of_birth" value={birthInfo.placeOfBirth} />
+          <InfoRow label="municipality_of_birth" value={birthInfo.municipalityOfBirth} />
+          <InfoRow label="country" value={birthInfo.country} />
         </Section>
 
         {/* Contact Information */}
         <div className="lg:col-span-2">
-          <Section title="Контакт" icon={faAddressCard}>
+          <Section title="contact" icon={faAddressCard}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <InfoRow label="Место на живеење" value={contact.placeOfResidence} icon={faMapMarkerAlt} />
-                <InfoRow label="Општина на живеење" value={contact.municipalityOfResidence} />
-                <InfoRow label="Држава" value={contact.country} />
-                <InfoRow label="Адреса" value={contact.address} />
-                <InfoRow label="Адреса на престој" value={contact.temporaryAddress} />
+                <InfoRow label="place_of_residence" value={contact.placeOfResidence} icon={faMapMarkerAlt} />
+                <InfoRow label="municipality_of_residence" value={contact.municipalityOfResidence} />
+                <InfoRow label="country" value={contact.country} />
+                <InfoRow label="address" value={contact.address} />
+                <InfoRow label="temporary_address" value={contact.temporaryAddress} />
               </div>
               <div>
-                <InfoRow label="Телефон" value={contact.phone} icon={faPhone} />
-                <InfoRow label="Моб. телефон" value={contact.mobilePhone} icon={faPhone} />
-                <InfoRow label="Број на пасош" value={contact.passportNumber} icon={faPassport} />
-                <InfoRow label="Датум на истекување на пасошот" value={contact.passportExpiryDate} />
-                <InfoRow label="Е-пошта" value={contact.email} icon={faEnvelope} />
-                <InfoRow label="Microsoft email" value={contact.microsoftEmail} icon={faEnvelope} />
+                <InfoRow label="phone" value={contact.phone} icon={faPhone} />
+                <InfoRow label="mobile_phone" value={contact.mobilePhone} icon={faPhone} />
+                <InfoRow label="passport_number" value={contact.passportNumber} icon={faPassport} />
+                <InfoRow label="passport_expiry_date" value={contact.passportExpiryDate} />
+                <InfoRow label="email" value={contact.email} icon={faEnvelope} />
+                <InfoRow label="microsoft_email" value={contact.microsoftEmail} icon={faEnvelope} />
               </div>
             </div>
           </Section>

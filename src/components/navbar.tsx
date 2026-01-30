@@ -9,6 +9,7 @@ import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { faBars, faTimes, faGraduationCap } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,13 +18,14 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const { t } = useTranslation();
   const menuItems = [
-    { icon: faUser, label: 'Профил', href: '/students/profile' },
-    { icon: faBookmark, label: 'Семестри', href: '/students/semesters' },
-    { icon: faBook, label: 'Предмети', href: '/students/subjects' },
-    { icon: faPenToSquare, label: 'Пријави', href: '/students/applications' },
-    { icon: faListCheck, label: 'Положени', href: '/students/exams' },
-    { icon: faFilePdf, label: 'Документи', href: '/students/documents' }
+    { icon: faUser, label: t('profile'), href: '/students/profile' },
+    { icon: faBookmark, label: t('semesters'), href: '/students/semesters' },
+    { icon: faBook, label: t('subjects'), href: '/students/subjects' },
+    { icon: faPenToSquare, label: t('applications'), href: '/students/applications' },
+    { icon: faListCheck, label: t('exams'), href: '/students/exams' },
+    { icon: faFilePdf, label: t('documents'), href: '/students/documents' }
   ];
 
   return (

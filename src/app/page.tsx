@@ -11,8 +11,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { login } from '@/lib/auth';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -53,21 +56,19 @@ export default function LoginPage() {
               {/* Sticky Notes */}
               <div className="w-full flex flex-col gap-4">
                 <div className="bg-yellow-100 border border-yellow-200 rounded-xl shadow-sm p-5">
-                  <div className="text-sm font-bold text-gray-900 mb-2">Login for Student</div>
+                  <div className="text-sm font-bold text-gray-900 mb-2">{t('login_student_title')}</div>
                   <div className="text-xs text-gray-800 whitespace-pre-wrap font-mono">
-                    {`"email":"boris@example.com",
-"password":"your-password-here",`}
+                    {t('login_student_example')}
                   </div>
                   <div className="mt-3 text-xs text-gray-700">
-                    may take up to 30 seconds afte long inactivity
+                    {t('login_note_slow')}
                   </div>
                 </div>
 
                 <div className="bg-yellow-100 border border-yellow-200 rounded-xl shadow-sm p-5">
-                  <div className="text-sm font-bold text-gray-900 mb-2">Login for Professor</div>
+                  <div className="text-sm font-bold text-gray-900 mb-2">{t('login_professor_title')}</div>
                   <div className="text-xs text-gray-800 whitespace-pre-wrap font-mono">
-                    {`"email":"andonov@gmail.com",
-"password":"123lol456",`}
+                    {t('login_professor_example')}
                   </div>
                 </div>
               </div>
@@ -83,19 +84,23 @@ export default function LoginPage() {
                   <FontAwesomeIcon icon={faUser} className="text-2xl text-primary" />
                 </div>
               </div>
-              <h1 className="text-2xl font-bold mb-2">Добредојде</h1>
+              <h1 className="text-2xl font-bold mb-2">{t('login_welcome')}</h1>
               <p className="text-blue-100 text-sm">
-                Најавете се во вашиот IKnow акаунт
+                {t('login_subtitle')}
               </p>
             </div>
 
             {/* Form */}
             <div className="p-8">
+              {/* Language Switcher above email field, centered */}
+              <div className="flex justify-center mb-6">
+                <LanguageSwitcher />
+              </div>
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Email Field */}
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                    Внесете е-пошта
+                    {t('login_email_label')}
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -109,7 +114,7 @@ export default function LoginPage() {
                       value={formData.email}
                       onChange={handleInputChange}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                      placeholder="Внесете е-пошта"
+                      placeholder={t('login_email_placeholder')}
                     />
                   </div>
                 </div>
@@ -117,7 +122,7 @@ export default function LoginPage() {
                 {/* Password Field */}
                 <div>
                   <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                    Лозинка
+                    {t('login_password_label')}
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -131,7 +136,7 @@ export default function LoginPage() {
                       value={formData.password}
                       onChange={handleInputChange}
                       className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                      placeholder="Внесете лозинка"
+                      placeholder={t('login_password_placeholder')}
                     />
                     <button
                       type="button"
@@ -156,20 +161,20 @@ export default function LoginPage() {
                       className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                     />
                     <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
-                      Запомни ме
+                      {t('login_remember_me')}
                     </label>
                   </div>
                   <button
                     type="button"
                     className="text-sm text-primary hover:text-blue-700 font-medium transition-colors"
                   >
-                    Заборавена лозинка?
+                    {t('login_forgot_password')}
                   </button>
                 </div>
 
                 {errorMessage && (
                   <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                    {errorMessage}
+                    {t(errorMessage) || errorMessage}
                   </div>
                 )}
 
@@ -180,7 +185,7 @@ export default function LoginPage() {
                   className="w-full bg-primary hover:bg-blue-700 disabled:opacity-60 disabled:hover:bg-primary text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                 >
                   <FontAwesomeIcon icon={faSignInAlt} className="h-4 w-4" />
-                  {isSubmitting ? 'Најави се...' : 'Најави се'}
+                  {isSubmitting ? t('login_button_loading') : t('login_button')}
                 </button>
               </form>
             </div>
@@ -188,9 +193,9 @@ export default function LoginPage() {
             {/* Footer */}
             <div className="bg-gray-50 px-8 py-4 border-t border-gray-100">
               <p className="text-center text-sm text-gray-600">
-                Немате акаунт?{' '}
+                {t('login_no_account')}{' '}
                 <button className="text-primary hover:text-blue-700 font-medium transition-colors">
-                  Контактирајте ја администрацијата
+                  {t('login_contact_admin')}
                 </button>
               </p>
             </div>
@@ -201,7 +206,7 @@ export default function LoginPage() {
                   <div className="inline-flex items-center gap-2 px-4 py-2 bg-white bg-opacity-80 rounded-lg shadow-sm">
                     <FontAwesomeIcon icon={faGraduationCap} className="text-primary" />
                     <span className="text-sm text-gray-600">
-                      Студентски информационен систем
+                      {t('login_footer')}
                     </span>
                   </div>
                 </div>

@@ -14,6 +14,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import documentsData from '@/data/documents.json';
+import { useTranslation } from 'react-i18next';
 
 interface TableCellProps {
   children: React.ReactNode;
@@ -27,7 +28,8 @@ const TableCell = ({ children, className = "" }: TableCellProps) => (
 );
 
 const StatusBadge = ({ status }: { status: string }) => {
-  if (status === "approved") {
+  const { t } = useTranslation();
+  if (status === t('approved', 'Одобрено')) {
     return (
       <span className="inline-flex items-center justify-center w-8 h-8 bg-green-100 text-green-600 rounded-full">
         <FontAwesomeIcon icon={faCheckCircle} className="w-5 h-5" />
@@ -42,8 +44,9 @@ const StatusBadge = ({ status }: { status: string }) => {
 };
 
 const PriceBadge = ({ price }: { price: number }) => {
+  const { t } = useTranslation();
   if (price === 0) {
-    return <span className="font-medium text-green-600">0,00</span>;
+    return <span className="font-medium text-green-600">{t('free', '0,00')}</span>;
   }
   return <span className="font-medium text-blue-600">{price.toFixed(2)}</span>;
 };
@@ -54,6 +57,7 @@ export default function DocumentsPage() {
   const [comment, setComment] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(15);
+  const { t } = useTranslation();
 
   const selectedDocument = documentsData.documentTypes.find(d => d.id === selectedDocumentType);
   const { documents, paymentInfo } = documentsData;
@@ -72,9 +76,9 @@ export default function DocumentsPage() {
             <FontAwesomeIcon icon={faFilePdf} className="text-3xl text-primary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold mb-2">Документи</h1>
+            <h1 className="text-3xl font-bold mb-2">{t('documents')}</h1>
             <p className="text-lg opacity-90">
-              Барање и преглед на документи
+              {t('documents_overview', 'Преглед на вашите документи и нивниот статус.')}
             </p>
           </div>
         </div>
@@ -84,14 +88,14 @@ export default function DocumentsPage() {
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-8">
         <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
           <FontAwesomeIcon icon={faFileText} className="text-primary" />
-          Ново барање за документ
+          {t('new_document_request', 'Ново барање за документ')}
         </h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Document Type Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Изберете документ:
+              {t('select_document', 'Избери документ')}:
             </label>
             <div className="relative">
               <button
@@ -100,7 +104,7 @@ export default function DocumentsPage() {
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-900 truncate">
-                    {selectedDocument?.name || "Изберете документ"}
+                    {selectedDocument ? t(selectedDocument.id) : t('select_document', 'Избери документ')}
                   </span>
                   <FontAwesomeIcon 
                     icon={faChevronDown} 
@@ -120,9 +124,9 @@ export default function DocumentsPage() {
                       }}
                       className="w-full px-4 py-3 text-left text-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 border-b border-gray-100 last:border-b-0"
                     >
-                      <div className="font-medium text-gray-900">{docType.name}</div>
+                      <div className="font-medium text-gray-900">{t(docType.id)}</div>
                       {docType.price > 0 && (
-                        <div className="text-xs text-blue-600 mt-1">Цена: {docType.price} мкд</div>
+                        <div className="text-xs text-blue-600 mt-1">{t('price', 'Цена')}: {docType.price} мкд</div>
                       )}
                     </button>
                   ))}
@@ -134,14 +138,14 @@ export default function DocumentsPage() {
           {/* Comment Section */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Коментар:
+              {t('comment', 'Коментар')}:
             </label>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={4}
               className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-none"
-              placeholder="Додајте коментар..."
+              placeholder={t('add_comment', 'Додај коментар')}
             />
           </div>
         </div>
@@ -152,7 +156,7 @@ export default function DocumentsPage() {
             disabled={selectedDocumentType === "select_document"}
           >
             <FontAwesomeIcon icon={faFileText} className="w-4 h-4" />
-            Внеси
+            {t('submit', 'Поднеси')}
           </button>
         </div>
       </div>
@@ -160,7 +164,7 @@ export default function DocumentsPage() {
       {/* Documents Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="bg-primary text-white px-6 py-4">
-          <h2 className="text-xl font-bold">Мои документи</h2>
+          <h2 className="text-xl font-bold">{t('my_documents', 'Мои документи')}</h2>
         </div>
         
         <div className="overflow-x-auto">
@@ -168,15 +172,15 @@ export default function DocumentsPage() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Архива</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Датум</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Барање</th>
-                <th className="px-4 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Цена</th>
-                <th className="px-4 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Платено</th>
-                <th className="px-4 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Документ</th>
-                <th className="px-4 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Плати онлајн</th>
-                <th className="px-4 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Коментар</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('archive', 'Архива')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('date', 'Датум')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('request', 'Барање')}</th>
+                <th className="px-4 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{t('price', 'Цена')}</th>
+                <th className="px-4 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{t('paid', 'Платено')}</th>
+                <th className="px-4 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{t('document', 'Документ')}</th>
+                <th className="px-4 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{t('pay_online', 'Плати онлајн')}</th>
+                <th className="px-4 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{t('status', 'Статус')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('comment', 'Коментар')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -186,7 +190,7 @@ export default function DocumentsPage() {
                   <TableCell className="font-mono text-sm text-primary font-medium">{document.archive}</TableCell>
                   <TableCell className="text-gray-600">{document.date}</TableCell>
                   <TableCell className="font-medium text-gray-900 max-w-xs">
-                    {document.request}
+                    {t(document.request)}
                   </TableCell>
                   <TableCell className="text-right">
                     <PriceBadge price={document.price} />
@@ -205,7 +209,7 @@ export default function DocumentsPage() {
                     {document.payOnline ? (
                       <FontAwesomeIcon icon={faCheckCircle} className="w-5 h-5 text-green-600" />
                     ) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-gray-400">{t('none', '—')}</span>
                     )}
                   </TableCell>
                   <TableCell className="text-center">
@@ -213,7 +217,7 @@ export default function DocumentsPage() {
                   </TableCell>
                   <TableCell>
                     {document.comment || (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-gray-400">{t('none', '—')}</span>
                     )}
                   </TableCell>
                 </tr>
@@ -226,7 +230,7 @@ export default function DocumentsPage() {
         <div className="bg-gray-50 px-6 py-4 flex items-center justify-between border-t border-gray-200">
           <div className="flex items-center gap-4 text-sm text-gray-700">
             <div className="flex items-center gap-2">
-              <span>Прикажи редови:</span>
+              <span>{t('show_rows', 'Прикажи редови')}:</span>
               <select
                 value={recordsPerPage}
                 onChange={(e) => setRecordsPerPage(Number(e.target.value))}
@@ -238,14 +242,14 @@ export default function DocumentsPage() {
               </select>
             </div>
             <div>
-              Страна <input
+              {t('page', 'Страница')} <input
                 type="number"
                 min="1"
                 max={totalPages}
                 value={currentPage}
                 onChange={(e) => setCurrentPage(Number(e.target.value))}
                 className="w-12 border border-gray-300 rounded px-2 py-1 text-sm text-center focus:outline-none focus:ring-1 focus:ring-primary"
-              /> од {totalPages}
+              /> {t('of', 'од')} {totalPages}
             </div>
           </div>
 
@@ -265,7 +269,7 @@ export default function DocumentsPage() {
               <FontAwesomeIcon icon={faChevronLeft} className="w-4 h-4" />
             </button>
             <span className="px-4 py-2 bg-primary text-white rounded text-sm font-medium">
-              Прва
+              {t('first', 'Прва')}
             </span>
             <button
               onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
@@ -282,12 +286,12 @@ export default function DocumentsPage() {
               <FontAwesomeIcon icon={faAngleDoubleRight} className="w-4 h-4" />
             </button>
             <span className="ml-4 text-sm text-gray-700">
-              Последна
+              {t('last', 'Последна')}
             </span>
           </div>
 
           <div className="text-sm text-gray-700">
-            Вкупно: {documents.length}
+            {t('total', 'Вкупно')}: {documents.length}
           </div>
         </div>
 
@@ -296,7 +300,7 @@ export default function DocumentsPage() {
           <div className="flex items-start gap-3">
             <FontAwesomeIcon icon={faMoneyBillWave} className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
             <p className="text-sm text-blue-800 leading-relaxed">
-              {paymentInfo}
+              {t('documents_payment_info', paymentInfo)}
             </p>
           </div>
         </div>
@@ -310,7 +314,7 @@ export default function DocumentsPage() {
               <FontAwesomeIcon icon={faFileText} className="text-xl" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Вкупно документи</h3>
+              <h3 className="text-lg font-bold text-gray-900">{t('total_documents', 'Вкупно документи')}</h3>
               <p className="text-2xl font-bold text-blue-600">
                 {documents.length}
               </p>
@@ -324,7 +328,7 @@ export default function DocumentsPage() {
               <FontAwesomeIcon icon={faCheckCircle} className="text-xl" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Одобрени</h3>
+              <h3 className="text-lg font-bold text-gray-900">{t('approved', 'Одобрени')}</h3>
               <p className="text-2xl font-bold text-green-600">
                 {documents.filter(doc => doc.status === "approved").length}
               </p>
@@ -338,9 +342,9 @@ export default function DocumentsPage() {
               <FontAwesomeIcon icon={faMoneyBillWave} className="text-xl" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Вкупна цена</h3>
+              <h3 className="text-lg font-bold text-gray-900">{t('total_price', 'Вкупна цена')}</h3>
               <p className="text-2xl font-bold text-yellow-600">
-                {documents.reduce((sum, doc) => sum + doc.price, 0).toFixed(2)} мкд
+                {documents.reduce((sum, doc) => sum + doc.price, 0).toFixed(2)} {t('mkd', 'мкд')}
               </p>
             </div>
           </div>
