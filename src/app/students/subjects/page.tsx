@@ -141,7 +141,7 @@ interface TableCellProps {
 }
 
 const TableCell = ({ children, className = "" }: TableCellProps) => (
-  <td className={`px-4 py-3 text-sm border-b border-gray-200 ${className}`}>
+  <td className={`px-4 py-3 text-sm border-b border-border ${className}`}>
     {children}
   </td>
 );
@@ -163,7 +163,7 @@ const StatusBadge = ({ status }: { status: string }) => {
     );
   }
   return (
-    <span className={`${baseClasses} bg-gray-100 text-gray-800`}>
+    <span className={`${baseClasses} bg-accent text-gray-800`}>
       {t(status) || status}
     </span>
   );
@@ -274,7 +274,7 @@ export default function SubjectsPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen pb-8">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-6">
           {t('loading')}
         </div>
       </div>
@@ -304,8 +304,8 @@ export default function SubjectsPage() {
       {/* Header */}
       <div className="bg-primary text-white rounded-xl p-8 mb-8">
         <div className="flex items-center gap-4">
-          <div className="bg-white bg-opacity-20 rounded-full p-4">
-            <FontAwesomeIcon icon={faBook} className="text-3xl text-primary" />
+          <div className="bg-white rounded-full p-4">
+            <FontAwesomeIcon icon={faBook} className="text-3xl text-[#0272D1]" />
           </div>
           <div>
             <h1 className="text-3xl font-bold mb-2">{t('subjects')}</h1>
@@ -323,29 +323,29 @@ export default function SubjectsPage() {
         <div className="lg:col-span-1 space-y-6">
           
           {/* Status Card */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="text-sm text-gray-600 mb-2">
+          <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
+            <div className="text-sm text-muted-foreground mb-2">
               {t('status')}: <span className="text-primary font-semibold">{t('enrolled_by_student')}</span>
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-muted-foreground">
               {t('ticket_number')}: <span className="font-semibold">{currentSemester.ticketNumber}</span>
             </div>
           </div>
 
           {/* Semester Selection */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="text-sm text-gray-600 mb-2">
+          <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
+            <div className="text-sm text-muted-foreground mb-2">
               {t('debt_from_documents')}: <span className="font-semibold">{currentSemester.debt}</span>
             </div>
             
             <div className="relative mt-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-muted-foreground mb-2">
                 {t('select_semester')}:
               </label>
               <div className="relative">
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                  className="w-full bg-card border border-border rounded-lg px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium text-primary">
@@ -353,13 +353,13 @@ export default function SubjectsPage() {
                     </span>
                     <FontAwesomeIcon 
                       icon={faChevronDown} 
-                      className={`w-4 h-4 text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+                      className={`w-4 h-4 text-muted-foreground transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
                     />
                   </div>
                 </button>
                 
                 {isDropdownOpen && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg">
+                  <div className="absolute z-10 w-full mt-1 bg-card border border-border rounded-lg shadow-lg">
                     {subjectsData.semesters.map((semester) => (
                       <button
                         key={semester.id}
@@ -367,10 +367,10 @@ export default function SubjectsPage() {
                           setSelectedSemester(semester.id);
                           setIsDropdownOpen(false);
                         }}
-                        className="w-full px-4 py-3 text-left text-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
+                        className="w-full px-4 py-3 text-left text-sm hover:bg-accent focus:outline-none focus:bg-accent first:rounded-t-lg last:rounded-b-lg"
                       >
-                        <div className="font-medium text-gray-900">{semester.name}</div>
-                        <div className="text-xs text-gray-500">{t('status')}: {semester.status}</div>
+                        <div className="font-medium text-card-foreground">{semester.name}</div>
+                        <div className="text-xs text-muted-foreground">{t('status')}: {semester.status}</div>
                       </button>
                     ))}
                   </div>
@@ -386,8 +386,8 @@ export default function SubjectsPage() {
           </div>
 
           {/* Enrolled Subjects */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
+            <h3 className="font-semibold text-card-foreground mb-3 flex items-center gap-2">
               <FontAwesomeIcon icon={faBook} className="w-4 h-4 text-primary" />
               {t('enrolled_subjects')}
             </h3>
@@ -399,7 +399,7 @@ export default function SubjectsPage() {
 
         {/* Right Column - Financial Information */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
             <div className="bg-primary text-white px-6 py-4">
               <h2 className="text-xl font-bold flex items-center gap-2">
                 <FontAwesomeIcon icon={faFileInvoice} />
@@ -412,16 +412,16 @@ export default function SubjectsPage() {
                 
                 {/* Left Financial Column */}
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">{t('sum')}:</span>
+                  <div className="flex justify-between items-center py-2 border-b border-border">
+                    <span className="text-muted-foreground">{t('sum')}:</span>
                     <span className="font-semibold text-primary">{currentSemester.financialInfo.sum}</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">{t('paid')}:</span>
+                  <div className="flex justify-between items-center py-2 border-b border-border">
+                    <span className="text-muted-foreground">{t('paid')}:</span>
                     <span className="font-semibold text-green-600">{currentSemester.financialInfo.paid}</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">{t('due')}:</span>
+                  <div className="flex justify-between items-center py-2 border-b border-border">
+                    <span className="text-muted-foreground">{t('due')}:</span>
                     <span className="font-semibold text-red-600">{currentSemester.financialInfo.due}</span>
                   </div>
                   <div className="mt-4 p-4 bg-blue-50 rounded-lg">
@@ -432,24 +432,24 @@ export default function SubjectsPage() {
 
                 {/* Right Financial Column */}
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">{t('credits')}:</span>
+                  <div className="flex justify-between items-center py-2 border-b border-border">
+                    <span className="text-muted-foreground">{t('credits')}:</span>
                     <span className="font-semibold text-primary">{currentSemester.financialInfo.credits}</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">{t('mksa')}:</span>
+                  <div className="flex justify-between items-center py-2 border-b border-border">
+                    <span className="text-muted-foreground">{t('mksa')}:</span>
                     <span className="font-semibold">{currentSemester.financialInfo.MKSA}</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">{t('electronic_registration')}:</span>
+                  <div className="flex justify-between items-center py-2 border-b border-border">
+                    <span className="text-muted-foreground">{t('electronic_registration')}:</span>
                     <span className="font-semibold">{currentSemester.financialInfo.electronicRegistration}</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">{t('eukim')}:</span>
+                  <div className="flex justify-between items-center py-2 border-b border-border">
+                    <span className="text-muted-foreground">{t('eukim')}:</span>
                     <span className="font-semibold">{currentSemester.financialInfo.eUKIM}</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="text-gray-600">{t('bank_provision')}:</span>
+                  <div className="flex justify-between items-center py-2 border-b border-border">
+                    <span className="text-muted-foreground">{t('bank_provision')}:</span>
                     <span className="font-semibold">{currentSemester.financialInfo.bankProvision}</span>
                   </div>
                   <div className="flex justify-between items-center py-3 border-t-2 border-primary bg-primary bg-opacity-5 rounded-lg px-4">
@@ -464,35 +464,35 @@ export default function SubjectsPage() {
       </div>
 
       {/* Subjects Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
         <div className="bg-primary text-white px-6 py-4">
           <h2 className="text-xl font-bold">{t('subjects_list')}</h2>
         </div>
         
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-accent">
               <tr>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('code')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('hours')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('which_time')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('subject')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('semester')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('status')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('signature')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('group')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('professor')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">#</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('code')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('hours')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('which_time')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('subject')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('semester')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('status')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('signature')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('group')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('professor')}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-border">
               {currentSubjects.map((subject: Subject) => (
-                <tr key={subject.id} className="hover:bg-gray-50 transition-colors">
-                  <TableCell className="font-medium text-gray-900">{subject.id}</TableCell>
+                <tr key={subject.id} className="hover:bg-accent transition-colors">
+                  <TableCell className="font-medium text-card-foreground">{subject.id}</TableCell>
                   <TableCell className="font-mono text-sm text-primary font-medium">{subject.code}</TableCell>
                   <TableCell className="font-medium">{subject.hours}</TableCell>
                   <TableCell className="text-center font-medium">{subject.kojPat}</TableCell>
-                  <TableCell className="font-medium text-gray-900 max-w-xs">
+                  <TableCell className="font-medium text-card-foreground max-w-xs">
                     <div className="flex items-center gap-2">
                       <FontAwesomeIcon icon={faBook} className="w-4 h-4 text-primary" />
                       {t(subject.name, subject.name)}
@@ -504,17 +504,17 @@ export default function SubjectsPage() {
                   </TableCell>
                   <TableCell className="text-center">
                     {subject.signature ? t(subject.signature, subject.signature) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-muted-foreground">—</span>
                     )}
                   </TableCell>
                   <TableCell className="text-center">
                     {subject.group ? t(subject.group, subject.group) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-muted-foreground">—</span>
                     )}
                   </TableCell>
                   <TableCell>
                     {subject.professor ? t(subject.professor, subject.professor) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-muted-foreground">—</span>
                     )}
                   </TableCell>
                 </tr>

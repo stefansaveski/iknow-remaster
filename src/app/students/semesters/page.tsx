@@ -48,7 +48,7 @@ interface TableCellProps {
 }
 
 const TableCell = ({ children, className = "" }: TableCellProps) => (
-  <td className={`px-4 py-3 text-sm border-b border-gray-100 ${className}`}>
+  <td className={`px-4 py-3 text-sm border-b border-border ${className}`}>
     {children}
   </td>
 );
@@ -65,7 +65,7 @@ const StatusBadge = ({ status }: { status: string }) => {
     );
   }
   return (
-    <span className={`${baseClasses} bg-gray-100 text-gray-800`}>
+    <span className={`${baseClasses} bg-accent text-gray-800`}>
       {t(status) || status}
     </span>
   );
@@ -86,7 +86,7 @@ const YesNoBadge = ({ value }: { value: string }) => {
       </span>
     );
   }
-  return <span className="text-gray-400">—</span>;
+  return <span className="text-muted-foreground">—</span>;
 };
 
 const SignatureBadge = ({ signatures }: { signatures: string }) => {
@@ -162,7 +162,7 @@ export default function SemestersPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen pb-8">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-6">
           {t('loading')}
         </div>
       </div>
@@ -184,8 +184,8 @@ export default function SemestersPage() {
       {/* Header */}
       <div className="bg-primary text-white rounded-xl p-8 mb-8">
         <div className="flex items-center gap-4">
-          <div className="bg-white bg-opacity-20 rounded-full p-4">
-            <FontAwesomeIcon icon={faCalendarAlt} className="text-3xl text-primary" />
+          <div className="bg-white rounded-full p-4">
+            <FontAwesomeIcon icon={faCalendarAlt} className="text-3xl text-[#0272D1]" />
           </div>
           <div>
             <h1 className="text-3xl font-bold mb-2">{t('semesters')}</h1>
@@ -197,41 +197,41 @@ export default function SemestersPage() {
       </div>
 
       {/* Table Container */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
         <div className="bg-primary text-white px-6 py-4">
           <h2 className="text-xl font-bold">{t('semesters_list')}</h2>
         </div>
         
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-accent">
               <tr>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('semester')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('direction')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('quota')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('note')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('student_com')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('sum')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('paid')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('ukim')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('created_on')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('date_changed')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('credits')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('type')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('doc')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('doc1')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('verified')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('taxes')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('signatures')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('status')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('completed')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">#</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('semester')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('direction')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('quota')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('note')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('student_com')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('sum')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('paid')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('ukim')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('created_on')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('date_changed')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('credits')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('type')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('doc')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('doc1')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('verified')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('taxes')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('signatures')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('status')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('completed')}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-border">
               {semesters.map((semester) => (
-                <tr key={semester.id} className="hover:bg-gray-50 transition-colors">
-                  <TableCell className="font-medium text-gray-900">{semester.id}</TableCell>
+                <tr key={semester.id} className="hover:bg-accent transition-colors">
+                  <TableCell className="font-medium text-card-foreground">{semester.id}</TableCell>
                   <TableCell className="font-medium text-primary">{semester.semester}</TableCell>
                   <TableCell>{semester.direction}</TableCell>
                   <TableCell className="max-w-xs">
@@ -245,7 +245,7 @@ export default function SemestersPage() {
                         {semester.note.length > 10 ? `${semester.note.substring(0, 10)}...` : semester.note}
                       </span>
                     ) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-muted-foreground">—</span>
                     )}
                   </TableCell>
                   <TableCell>
@@ -254,7 +254,7 @@ export default function SemestersPage() {
                         {semester.studentCom.length > 10 ? `${semester.studentCom.substring(0, 10)}...` : semester.studentCom}
                       </span>
                     ) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-muted-foreground">—</span>
                     )}
                   </TableCell>
                   <TableCell className="font-medium">
@@ -264,7 +264,7 @@ export default function SemestersPage() {
                         {semester.sum}
                       </span>
                     ) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-muted-foreground">—</span>
                     )}
                   </TableCell>
                   <TableCell className="font-medium">
@@ -274,18 +274,18 @@ export default function SemestersPage() {
                         {semester.paid}
                       </span>
                     ) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-muted-foreground">—</span>
                     )}
                   </TableCell>
                   <TableCell className="font-medium">
                     {semester.ukim ? (
                       <span className="text-blue-600">{semester.ukim}</span>
                     ) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-muted-foreground">—</span>
                     )}
                   </TableCell>
-                  <TableCell className="text-gray-600">{semester.createdOn}</TableCell>
-                  <TableCell className="text-gray-600">{semester.dateChanged}</TableCell>
+                  <TableCell className="text-muted-foreground">{semester.createdOn}</TableCell>
+                  <TableCell className="text-muted-foreground">{semester.dateChanged}</TableCell>
                   <TableCell className="font-medium text-primary">{semester.credits}</TableCell>
                   <TableCell>
                     <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
@@ -330,13 +330,13 @@ export default function SemestersPage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+        <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
           <div className="flex items-center gap-4">
             <div className="bg-green-100 text-green-600 rounded-full p-3">
               <FontAwesomeIcon icon={faCheckCircle} className="text-xl" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">{t('completed_semesters')}</h3>
+              <h3 className="text-lg font-bold text-card-foreground">{t('completed_semesters')}</h3>
               <p className="text-2xl font-bold text-green-600">
                 {semesters.filter(s => s.completed !== "Не").length}
               </p>
@@ -344,13 +344,13 @@ export default function SemestersPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+        <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
           <div className="flex items-center gap-4">
             <div className="bg-blue-100 text-blue-600 rounded-full p-3">
               <FontAwesomeIcon icon={faFileAlt} className="text-xl" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">{t('verified_semesters')}</h3>
+              <h3 className="text-lg font-bold text-card-foreground">{t('verified_semesters')}</h3>
               <p className="text-2xl font-bold text-blue-600">
                 {semesters.filter(s => s.verified === "Да").length}
               </p>
@@ -358,13 +358,13 @@ export default function SemestersPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+        <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
           <div className="flex items-center gap-4">
             <div className="bg-primary text-white rounded-full p-3">
               <FontAwesomeIcon icon={faCalendarAlt} className="text-xl" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">{t('total_semesters')}</h3>
+              <h3 className="text-lg font-bold text-card-foreground">{t('total_semesters')}</h3>
               <p className="text-2xl font-bold text-primary">
                 {semesters.length}
               </p>

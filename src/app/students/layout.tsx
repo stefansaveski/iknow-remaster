@@ -31,14 +31,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="mx-auto max-w-6xl px-4">
-          <Header />
-          <Navbar />
-          {children}
-        </div>
-      </body>
-    </html>
+    <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <Header />
+      <Navbar />
+      {children}
+    </div>
   );
 }

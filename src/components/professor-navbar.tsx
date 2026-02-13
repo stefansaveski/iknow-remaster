@@ -22,10 +22,10 @@ const ProfessorNavbar = () => {
   return (
     <>
       {/* Desktop Navbar */}
-      <nav className="hidden md:flex flex-row gap-2 justify-evenly bg-primary text-white p-7 rounded-xl my-5 text-xl">
+      <nav className="hidden md:flex flex-row gap-2 justify-evenly bg-primary text-primary-foreground p-7 rounded-xl my-5 text-xl">
         {menuItems.map((item) => (
           <Link key={item.href} href={item.href}>
-            <div className="group flex flex-row items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-20 hover:scale-105 hover:shadow-lg hover:text-primary">
+            <div className="group flex flex-row items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-all duration-300 hover:bg-card hover:text-card-foreground hover:scale-105 hover:shadow-lg">
               <FontAwesomeIcon icon={item.icon} className="transition-transform duration-300 group-hover:rotate-12" />
               <span>{item.label}</span>
             </div>
@@ -34,7 +34,7 @@ const ProfessorNavbar = () => {
       </nav>
 
       {/* Mobile Navbar */}
-      <nav className="md:hidden bg-primary text-white rounded-xl my-5">
+      <nav className="md:hidden bg-primary text-primary-foreground rounded-xl my-5">
         <div className="flex justify-between items-center p-4">
           <div className="flex items-center gap-2 text-xl font-bold">
             <FontAwesomeIcon icon={faChalkboardUser} className="text-xl" />
@@ -43,7 +43,7 @@ const ProfessorNavbar = () => {
 
           <button
             onClick={toggleMenu}
-            className="p-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors duration-300"
+            className="p-2 rounded-lg hover:bg-card hover:text-card-foreground transition-colors duration-300"
             aria-label="Toggle menu"
           >
             <FontAwesomeIcon
@@ -61,7 +61,7 @@ const ProfessorNavbar = () => {
           <div className="px-4 pb-4 space-y-2">
             {menuItems.map((item) => (
               <Link key={item.href} href={item.href}>
-                <div className="group flex flex-row items-center gap-3 px-3 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-20 hover:text-primary">
+                <div className="group flex flex-row items-center gap-3 px-3 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:bg-card hover:text-card-foreground">
                   <FontAwesomeIcon
                     icon={item.icon}
                     className="transition-transform duration-300 group-hover:rotate-12"

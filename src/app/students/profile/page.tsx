@@ -97,12 +97,12 @@ interface InfoRowProps {
 const InfoRow = ({ label, value, icon }: InfoRowProps) => {
   const { t } = useTranslation();
   return (
-    <div className="flex justify-between items-center py-3 border-b border-gray-100 last:border-b-0">
-      <div className="flex items-center gap-2 text-gray-600 font-medium">
+    <div className="flex justify-between items-center py-3 border-b border-border last:border-b-0">
+      <div className="flex items-center gap-2 text-muted-foreground font-medium">
         {icon && <FontAwesomeIcon icon={icon} className="w-4 h-4" />}
         <span>{t(label)}:</span>
       </div>
-      <div className="text-gray-900 font-semibold text-right max-w-xs break-words">
+      <div className="text-card-foreground font-semibold text-right max-w-xs break-words">
         {value || t('n_a')}
       </div>
     </div>
@@ -118,7 +118,7 @@ interface SectionProps {
 const Section = ({ title, icon, children }: SectionProps) => {
   const { t } = useTranslation();
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
       <div className="bg-primary text-white px-6 py-4">
         <div className="flex items-center gap-3">
           <FontAwesomeIcon icon={icon} className="text-xl" />
@@ -186,7 +186,7 @@ export default function ProfilePage() {
   if (isLoading) {
     return (
       <div className="min-h-screen pb-8">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-6">
           {t('loading')}
         </div>
       </div>
@@ -211,8 +211,8 @@ export default function ProfilePage() {
       <div className="bg-primary text-white rounded-xl p-8 mb-8">
         <div className="flex items-center gap-6">
           <div className="relative">
-            <div className="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center border-2 border-white border-opacity-30">
-              <FontAwesomeIcon icon={faUser} className="text-3xl text-primary" />
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center border-2 border-white shadow-lg">
+              <FontAwesomeIcon icon={faUser} className="text-3xl text-[#0272D1]" />
             </div>
             <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white"></div>
           </div>

@@ -44,7 +44,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
+    <header className="bg-card shadow-sm border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-4 gap-4 sm:gap-0">
           {/* Left side - Logos and University Info */}
@@ -71,10 +71,10 @@ const Header = () => {
             </div>
             {/* University Text */}
             <div className="hidden sm:block">
-              <div className="text-gray-900 font-medium text-sm">
+              <div className="text-card-foreground font-medium text-sm">
                 {t('university')}
               </div>
-              <div className="text-gray-700 text-sm">
+              <div className="text-muted-foreground text-sm">
                 {t('faculty')}
               </div>
             </div>
@@ -87,16 +87,16 @@ const Header = () => {
             </div>
             <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-end">
               {/* User Avatar */}
-              <div className="hidden sm:flex items-center justify-center w-10 h-10 bg-gray-800 text-white rounded-full">
+              <div className="hidden sm:flex items-center justify-center w-10 h-10 bg-primary text-primary-foreground rounded-full">
                 <FontAwesomeIcon icon={faUser} className="text-sm" />
               </div>
               {/* User Name */}
-              <div className="hidden sm:block text-gray-900 font-medium">
+              <div className="hidden sm:block text-card-foreground font-medium">
                 {userName || '...'}
               </div>
               {/* Logout Button - more stylish and full width on mobile */}
               <button
-                className="w-full sm:w-auto ml-0 sm:ml-2 px-4 py-2 border-2 border-primary text-primary bg-white rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-blue-50 transition-all duration-200 shadow-sm"
+                className="w-full sm:w-auto ml-0 sm:ml-2 px-4 py-2 border-2 border-primary text-primary bg-card rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-accent transition-all duration-200 shadow-sm"
                 onClick={handleLogout}
               >
                 <svg xmlns='http://www.w3.org/2000/svg' className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1' /></svg>

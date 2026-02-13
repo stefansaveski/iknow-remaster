@@ -115,10 +115,10 @@ const Exams = () => {
   }, [exams]);
 
   const getGradeColor = (grade: number) => {
-    if (grade >= 9) return "bg-green-100 text-green-800 border-green-200";
-    if (grade >= 8) return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    if (grade >= 6) return "bg-orange-100 text-orange-800 border-orange-200";
-    return "bg-red-100 text-red-800 border-red-200";
+    if (grade >= 9) return "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20";
+    if (grade >= 8) return "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-500/20";
+    if (grade >= 6) return "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20";
+    return "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20";
   };
 
   const handleSortByGrade = () => {
@@ -185,7 +185,7 @@ const Exams = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg shadow-sm p-6">
+      <div className="bg-card rounded-lg shadow-sm p-6">
         {t('loading', 'Loading...')}
       </div>
     );
@@ -193,8 +193,8 @@ const Exams = () => {
 
   if (errorMessage) {
     return (
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <div className="bg-card rounded-lg shadow-sm p-6">
+        <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-600 dark:text-red-400">
           {t('failed_to_load_exams', errorMessage)}
         </div>
       </div>
@@ -202,42 +202,42 @@ const Exams = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
+    <div className="bg-card rounded-lg shadow-sm p-6 space-y-6">
       {/* Statistics Section */}
       <div className="space-y-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {/* Average Grade */}
           <div className="text-center">
-            <div className="text-3xl font-bold text-gray-900">{stats.average}</div>
-            <div className="text-sm text-gray-500 mt-1">{t('average', 'Просек')}</div>
+            <div className="text-3xl font-bold text-card-foreground">{stats.average}</div>
+            <div className="text-sm text-muted-foreground mt-1">{t('average', 'Просек')}</div>
           </div>
 
           {/* Credits */}
           <div className="text-center">
-            <div className="text-3xl font-bold text-gray-900">
+            <div className="text-3xl font-bold text-card-foreground">
               {stats.credits.current}
-              <span className="text-lg text-gray-400">/{stats.credits.total}</span>
+              <span className="text-lg text-muted-foreground">/{stats.credits.total}</span>
             </div>
-            <div className="text-sm text-gray-500 mt-1">{t('credits', 'Кредити')}</div>
+            <div className="text-sm text-muted-foreground mt-1">{t('credits', 'Кредити')}</div>
           </div>
 
           {/* Passed Exams */}
           <div className="text-center">
-            <div className="text-3xl font-bold text-gray-900">{stats.passed}</div>
-            <div className="text-sm text-gray-500 mt-1">{t('passed', 'Положени')}</div>
+            <div className="text-3xl font-bold text-card-foreground">{stats.passed}</div>
+            <div className="text-sm text-muted-foreground mt-1">{t('passed', 'Положени')}</div>
           </div>
 
           {/* Remaining Exams */}
           <div className="text-center">
-            <div className="text-3xl font-bold text-gray-900">{stats.remaining}</div>
-            <div className="text-sm text-gray-500 mt-1">{t('remaining', 'Останато')}</div>
+            <div className="text-3xl font-bold text-card-foreground">{stats.remaining}</div>
+            <div className="text-sm text-muted-foreground mt-1">{t('remaining', 'Останато')}</div>
           </div>
         </div>
 
         {/* Progress Bar spanning entire statistics section */}
-        <div className="w-full bg-gray-200 rounded-full h-2">
+        <div className="w-full bg-secondary rounded-full h-2">
           <div
-            className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+            className="bg-primary h-2 rounded-full transition-all duration-300"
             style={{ width: `${creditsPercentage}%` }}
           ></div>
         </div>
@@ -245,54 +245,54 @@ const Exams = () => {
 
       {/* Exams Table */}
       <div>
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('exams', 'Испити')}</h3>
+        <h3 className="text-xl font-semibold text-card-foreground mb-4">{t('exams', 'Испити')}</h3>
 
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">#</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">{t('subject', 'Предмет')}</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">{t('semester', 'Семестар')}</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">{t('credits', 'Кредити')}</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">
+              <tr className="border-b border-border">
+                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">#</th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{t('subject', 'Предмет')}</th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{t('semester', 'Семестар')}</th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{t('credits', 'Кредити')}</th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">
                   <button
                     onClick={handleSortByDate}
-                    className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 transform hover:scale-105"
+                    className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-accent hover:text-accent-foreground transition-all duration-200 transform hover:scale-105"
                   >
                     {t('date', 'Датум')}
                     <FontAwesomeIcon
                       icon={getSortIcon('date')}
                       className={`text-xs transition-colors duration-200 ${
-                        sortField === 'date' ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'
+                        sortField === 'date' ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground'
                       }`}
                     />
                   </button>
                 </th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">
+                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">
                   <button
                     onClick={handleSortByGrade}
-                    className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 transform hover:scale-105"
+                    className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-accent hover:text-accent-foreground transition-all duration-200 transform hover:scale-105"
                   >
                     {t('grade', 'Оценка')}
                     <FontAwesomeIcon
                       icon={getSortIcon('grade')}
                       className={`text-xs transition-colors duration-200 ${
-                        sortField === 'grade' ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'
+                        sortField === 'grade' ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground'
                       }`}
                     />
                   </button>
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-border">
               {getSortedExams().map((exam) => (
-                <tr key={exam.id} className="hover:bg-gray-50 transition-colors duration-150">
-                  <td className="py-4 px-4 text-sm text-gray-900">{exam.id}</td>
-                  <td className="py-4 px-4 text-sm text-gray-900 font-medium">{exam.subject}</td>
-                  <td className="py-4 px-4 text-sm text-gray-500">{exam.semester}</td>
-                  <td className="py-4 px-4 text-sm text-gray-500">{exam.credits}</td>
-                  <td className="py-4 px-4 text-sm text-gray-500">{exam.date}</td>
+                <tr key={exam.id} className="hover:bg-accent/50 transition-colors duration-150">
+                  <td className="py-4 px-4 text-sm text-card-foreground">{exam.id}</td>
+                  <td className="py-4 px-4 text-sm text-card-foreground font-medium">{exam.subject}</td>
+                  <td className="py-4 px-4 text-sm text-muted-foreground">{exam.semester}</td>
+                  <td className="py-4 px-4 text-sm text-muted-foreground">{exam.credits}</td>
+                  <td className="py-4 px-4 text-sm text-muted-foreground">{exam.date}</td>
                   <td className="py-4 px-4">
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-sm font-medium border ${getGradeColor(exam.grade)}`}>
                       {exam.grade}

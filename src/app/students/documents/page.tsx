@@ -22,7 +22,7 @@ interface TableCellProps {
 }
 
 const TableCell = ({ children, className = "" }: TableCellProps) => (
-  <td className={`px-4 py-3 text-sm border-b border-gray-200 ${className}`}>
+  <td className={`px-4 py-3 text-sm border-b border-border ${className}`}>
     {children}
   </td>
 );
@@ -37,7 +37,7 @@ const StatusBadge = ({ status }: { status: string }) => {
     );
   }
   return (
-    <span className="inline-flex items-center justify-center w-8 h-8 bg-gray-100 text-gray-600 rounded-full">
+    <span className="inline-flex items-center justify-center w-8 h-8 bg-accent text-muted-foreground rounded-full">
       <FontAwesomeIcon icon={faFileText} className="w-4 h-4" />
     </span>
   );
@@ -72,8 +72,8 @@ export default function DocumentsPage() {
       {/* Header */}
       <div className="bg-primary text-white rounded-xl p-8 mb-8">
         <div className="flex items-center gap-4">
-          <div className="bg-white bg-opacity-20 rounded-full p-4">
-            <FontAwesomeIcon icon={faFilePdf} className="text-3xl text-primary" />
+          <div className="bg-white rounded-full p-4">
+            <FontAwesomeIcon icon={faFilePdf} className="text-3xl text-[#0272D1]" />
           </div>
           <div>
             <h1 className="text-3xl font-bold mb-2">{t('documents')}</h1>
@@ -85,8 +85,8 @@ export default function DocumentsPage() {
       </div>
 
       {/* Document Request Form */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
+      <div className="bg-card rounded-xl p-6 shadow-sm border border-border mb-8">
+        <h2 className="text-lg font-semibold text-card-foreground mb-6 flex items-center gap-2">
           <FontAwesomeIcon icon={faFileText} className="text-primary" />
           {t('new_document_request', 'Ново барање за документ')}
         </h2>
@@ -94,27 +94,27 @@ export default function DocumentsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Document Type Selection */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               {t('select_document', 'Избери документ')}:
             </label>
             <div className="relative">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                className="w-full bg-card border border-border rounded-lg px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-900 truncate">
+                  <span className="text-sm text-card-foreground truncate">
                     {selectedDocument ? t(selectedDocument.id) : t('select_document', 'Избери документ')}
                   </span>
                   <FontAwesomeIcon 
                     icon={faChevronDown} 
-                    className={`w-4 h-4 text-gray-400 transition-transform ml-2 flex-shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`}
+                    className={`w-4 h-4 text-muted-foreground transition-transform ml-2 flex-shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`}
                   />
                 </div>
               </button>
               
               {isDropdownOpen && (
-                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-80 overflow-y-auto">
+                <div className="absolute z-10 w-full mt-1 bg-card border border-border rounded-lg shadow-lg max-h-80 overflow-y-auto">
                   {documentsData.documentTypes.map((docType) => (
                     <button
                       key={docType.id}
@@ -122,9 +122,9 @@ export default function DocumentsPage() {
                         setSelectedDocumentType(docType.id);
                         setIsDropdownOpen(false);
                       }}
-                      className="w-full px-4 py-3 text-left text-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 border-b border-gray-100 last:border-b-0"
+                      className="w-full px-4 py-3 text-left text-sm hover:bg-accent focus:outline-none focus:bg-accent border-b border-border last:border-b-0"
                     >
-                      <div className="font-medium text-gray-900">{t(docType.id)}</div>
+                      <div className="font-medium text-card-foreground">{t(docType.id)}</div>
                       {docType.price > 0 && (
                         <div className="text-xs text-blue-600 mt-1">{t('price', 'Цена')}: {docType.price} мкд</div>
                       )}
@@ -137,14 +137,14 @@ export default function DocumentsPage() {
 
           {/* Comment Section */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               {t('comment', 'Коментар')}:
             </label>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={4}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-none"
+              className="w-full border border-border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-none"
               placeholder={t('add_comment', 'Додај коментар')}
             />
           </div>
@@ -162,34 +162,34 @@ export default function DocumentsPage() {
       </div>
 
       {/* Documents Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
         <div className="bg-primary text-white px-6 py-4">
           <h2 className="text-xl font-bold">{t('my_documents', 'Мои документи')}</h2>
         </div>
         
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-accent">
               <tr>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('archive', 'Архива')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('date', 'Датум')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('request', 'Барање')}</th>
-                <th className="px-4 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{t('price', 'Цена')}</th>
-                <th className="px-4 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{t('paid', 'Платено')}</th>
-                <th className="px-4 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{t('document', 'Документ')}</th>
-                <th className="px-4 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{t('pay_online', 'Плати онлајн')}</th>
-                <th className="px-4 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{t('status', 'Статус')}</th>
-                <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('comment', 'Коментар')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">#</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('archive', 'Архива')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('date', 'Датум')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('request', 'Барање')}</th>
+                <th className="px-4 py-4 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('price', 'Цена')}</th>
+                <th className="px-4 py-4 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('paid', 'Платено')}</th>
+                <th className="px-4 py-4 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('document', 'Документ')}</th>
+                <th className="px-4 py-4 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('pay_online', 'Плати онлајн')}</th>
+                <th className="px-4 py-4 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('status', 'Статус')}</th>
+                <th className="px-4 py-4 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('comment', 'Коментар')}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-border">
               {currentDocuments.map((document) => (
-                <tr key={document.id} className="hover:bg-gray-50 transition-colors">
-                  <TableCell className="font-medium text-gray-900">{document.id}</TableCell>
+                <tr key={document.id} className="hover:bg-accent transition-colors">
+                  <TableCell className="font-medium text-card-foreground">{document.id}</TableCell>
                   <TableCell className="font-mono text-sm text-primary font-medium">{document.archive}</TableCell>
-                  <TableCell className="text-gray-600">{document.date}</TableCell>
-                  <TableCell className="font-medium text-gray-900 max-w-xs">
+                  <TableCell className="text-muted-foreground">{document.date}</TableCell>
+                  <TableCell className="font-medium text-card-foreground max-w-xs">
                     {t(document.request)}
                   </TableCell>
                   <TableCell className="text-right">
@@ -209,7 +209,7 @@ export default function DocumentsPage() {
                     {document.payOnline ? (
                       <FontAwesomeIcon icon={faCheckCircle} className="w-5 h-5 text-green-600" />
                     ) : (
-                      <span className="text-gray-400">{t('none', '—')}</span>
+                      <span className="text-muted-foreground">{t('none', '—')}</span>
                     )}
                   </TableCell>
                   <TableCell className="text-center">
@@ -217,7 +217,7 @@ export default function DocumentsPage() {
                   </TableCell>
                   <TableCell>
                     {document.comment || (
-                      <span className="text-gray-400">{t('none', '—')}</span>
+                      <span className="text-muted-foreground">{t('none', '—')}</span>
                     )}
                   </TableCell>
                 </tr>
@@ -227,14 +227,14 @@ export default function DocumentsPage() {
         </div>
 
         {/* Pagination */}
-        <div className="bg-gray-50 px-6 py-4 flex items-center justify-between border-t border-gray-200">
-          <div className="flex items-center gap-4 text-sm text-gray-700">
+        <div className="bg-accent px-6 py-4 flex items-center justify-between border-t border-border">
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <span>{t('show_rows', 'Прикажи редови')}:</span>
               <select
                 value={recordsPerPage}
                 onChange={(e) => setRecordsPerPage(Number(e.target.value))}
-                className="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                className="border border-border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
               >
                 <option value={15}>15</option>
                 <option value={25}>25</option>
@@ -248,7 +248,7 @@ export default function DocumentsPage() {
                 max={totalPages}
                 value={currentPage}
                 onChange={(e) => setCurrentPage(Number(e.target.value))}
-                className="w-12 border border-gray-300 rounded px-2 py-1 text-sm text-center focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-12 border border-border rounded px-2 py-1 text-sm text-center focus:outline-none focus:ring-1 focus:ring-primary"
               /> {t('of', 'од')} {totalPages}
             </div>
           </div>
@@ -257,14 +257,14 @@ export default function DocumentsPage() {
             <button
               onClick={() => setCurrentPage(1)}
               disabled={currentPage === 1}
-              className="p-2 text-gray-500 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 text-muted-foreground hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FontAwesomeIcon icon={faAngleDoubleLeft} className="w-4 h-4" />
             </button>
             <button
               onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
-              className="p-2 text-gray-500 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 text-muted-foreground hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FontAwesomeIcon icon={faChevronLeft} className="w-4 h-4" />
             </button>
@@ -274,23 +274,23 @@ export default function DocumentsPage() {
             <button
               onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
               disabled={currentPage === totalPages}
-              className="p-2 text-gray-500 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 text-muted-foreground hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FontAwesomeIcon icon={faChevronRight} className="w-4 h-4" />
             </button>
             <button
               onClick={() => setCurrentPage(totalPages)}
               disabled={currentPage === totalPages}
-              className="p-2 text-gray-500 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 text-muted-foreground hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FontAwesomeIcon icon={faAngleDoubleRight} className="w-4 h-4" />
             </button>
-            <span className="ml-4 text-sm text-gray-700">
+            <span className="ml-4 text-sm text-muted-foreground">
               {t('last', 'Последна')}
             </span>
           </div>
 
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-muted-foreground">
             {t('total', 'Вкупно')}: {documents.length}
           </div>
         </div>
@@ -308,13 +308,13 @@ export default function DocumentsPage() {
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+        <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
           <div className="flex items-center gap-4">
             <div className="bg-blue-100 text-blue-600 rounded-full p-3">
               <FontAwesomeIcon icon={faFileText} className="text-xl" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">{t('total_documents', 'Вкупно документи')}</h3>
+              <h3 className="text-lg font-bold text-card-foreground">{t('total_documents', 'Вкупно документи')}</h3>
               <p className="text-2xl font-bold text-blue-600">
                 {documents.length}
               </p>
@@ -322,13 +322,13 @@ export default function DocumentsPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+        <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
           <div className="flex items-center gap-4">
             <div className="bg-green-100 text-green-600 rounded-full p-3">
               <FontAwesomeIcon icon={faCheckCircle} className="text-xl" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">{t('approved', 'Одобрени')}</h3>
+              <h3 className="text-lg font-bold text-card-foreground">{t('approved', 'Одобрени')}</h3>
               <p className="text-2xl font-bold text-green-600">
                 {documents.filter(doc => doc.status === "approved").length}
               </p>
@@ -336,13 +336,13 @@ export default function DocumentsPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+        <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
           <div className="flex items-center gap-4">
             <div className="bg-yellow-100 text-yellow-600 rounded-full p-3">
               <FontAwesomeIcon icon={faMoneyBillWave} className="text-xl" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">{t('total_price', 'Вкупна цена')}</h3>
+              <h3 className="text-lg font-bold text-card-foreground">{t('total_price', 'Вкупна цена')}</h3>
               <p className="text-2xl font-bold text-yellow-600">
                 {documents.reduce((sum, doc) => sum + doc.price, 0).toFixed(2)} {t('mkd', 'мкд')}
               </p>

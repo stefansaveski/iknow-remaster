@@ -5,6 +5,8 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
+import { ThemeProvider } from '../components/theme-provider';
+import { ThemeToggle } from '../components/theme-toggle';
 
 config.autoAddCss = false;
 
@@ -24,11 +26,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <I18nextProvider i18n={i18n}>
-          <div className="mx-auto max-w-6xl px-4">{children}</div>
-        </I18nextProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <I18nextProvider i18n={i18n}>
+            <div className="fixed top-4 right-4 z-50">
+              <ThemeToggle />
+            </div>
+            <div className="mx-auto max-w-6xl px-4">{children}</div>
+          </I18nextProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

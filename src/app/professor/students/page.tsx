@@ -128,21 +128,21 @@ export default function ProfessorStudentsPage() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <div className="bg-card rounded-xl shadow-sm border border-border p-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
 
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">{t('prof_students_title')}</h1>
-          <p className="text-gray-700 mt-1">
+          <h1 className="text-2xl font-semibold text-card-foreground">{t('prof_students_title')}</h1>
+          <p className="text-muted-foreground mt-1">
             {t('prof_students_data_note')} <span className="font-mono">/api/prof/students</span> (demo store).
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex flex-col">
-            <label className="text-sm text-gray-700">{t('filter_by_subject')}</label>
+            <label className="text-sm text-muted-foreground">{t('filter_by_subject')}</label>
             <select
-              className="border border-gray-300 rounded-lg px-3 py-2"
+              className="border border-border rounded-lg px-3 py-2"
               value={subjectFilter}
               onChange={(e) => setSubjectFilter(e.target.value)}
             >
@@ -158,9 +158,9 @@ export default function ProfessorStudentsPage() {
           </div>
 
           <div className="flex flex-col">
-            <label className="text-sm text-gray-700">{t('find_student_by_id')}</label>
+            <label className="text-sm text-muted-foreground">{t('find_student_by_id')}</label>
             <input
-              className="border border-gray-300 rounded-lg px-3 py-2"
+              className="border border-border rounded-lg px-3 py-2"
               placeholder={t('student_id_placeholder')}
               value={studentIdQuery}
               onChange={(e) => setStudentIdQuery(e.target.value)}
@@ -176,26 +176,26 @@ export default function ProfessorStudentsPage() {
       )}
 
       <div className="mt-6 overflow-x-auto">
-        <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
-          <thead className="bg-gray-50">
+        <table className="min-w-full border border-border rounded-lg overflow-hidden">
+          <thead className="bg-accent">
             <tr>
-              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">{t('student')}</th>
-              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">{t('id')}</th>
-              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">{t('subject')}</th>
-              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">{t('grade')}</th>
-              <th className="text-left text-sm font-semibold text-gray-700 px-4 py-3 border-b">{t('actions')}</th>
+              <th className="text-left text-sm font-semibold text-muted-foreground px-4 py-3 border-b">{t('student')}</th>
+              <th className="text-left text-sm font-semibold text-muted-foreground px-4 py-3 border-b">{t('id')}</th>
+              <th className="text-left text-sm font-semibold text-muted-foreground px-4 py-3 border-b">{t('subject')}</th>
+              <th className="text-left text-sm font-semibold text-muted-foreground px-4 py-3 border-b">{t('grade')}</th>
+              <th className="text-left text-sm font-semibold text-muted-foreground px-4 py-3 border-b">{t('actions')}</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td className="px-4 py-4 text-gray-700" colSpan={5}>
+                <td className="px-4 py-4 text-muted-foreground" colSpan={5}>
                   {t('loading')}
                 </td>
               </tr>
             ) : filteredRows.length === 0 ? (
               <tr>
-                <td className="px-4 py-4 text-gray-700" colSpan={5}>
+                <td className="px-4 py-4 text-muted-foreground" colSpan={5}>
                   {t('no_students_found')}
                 </td>
               </tr>
@@ -206,14 +206,14 @@ export default function ProfessorStudentsPage() {
                 const busy = actionBusyKey === key;
 
                 return (
-                  <tr key={key} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 border-b text-gray-900">{r.studentName}</td>
-                    <td className="px-4 py-3 border-b text-gray-900">{r.studentIdStr}</td>
-                    <td className="px-4 py-3 border-b text-gray-900">{r.subjectName}</td>
+                  <tr key={key} className="hover:bg-accent">
+                    <td className="px-4 py-3 border-b text-card-foreground">{r.studentName}</td>
+                    <td className="px-4 py-3 border-b text-card-foreground">{r.studentIdStr}</td>
+                    <td className="px-4 py-3 border-b text-card-foreground">{r.subjectName}</td>
                     <td className="px-4 py-3 border-b">
                       <div className="flex items-center gap-3">
                         <select
-                          className="border border-gray-300 rounded-lg px-3 py-2"
+                          className="border border-border rounded-lg px-3 py-2"
                           value={selected}
                           onChange={(e) =>
                             setGradeSelection((prev) => ({
@@ -228,7 +228,7 @@ export default function ProfessorStudentsPage() {
                             </option>
                           ))}
                         </select>
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-muted-foreground">
                           {t('current')}: {r.grade > 0 ? r.grade : t('none')}
                         </span>
                       </div>

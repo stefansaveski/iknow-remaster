@@ -55,19 +55,19 @@ export default function LoginPage() {
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-[24rem_28rem_24rem] lg:items-start lg:justify-center">
               {/* Sticky Notes */}
               <div className="w-full flex flex-col gap-4">
-                <div className="bg-yellow-100 border border-yellow-200 rounded-xl shadow-sm p-5">
-                  <div className="text-sm font-bold text-gray-900 mb-2">{t('login_student_title')}</div>
-                  <div className="text-xs text-gray-800 whitespace-pre-wrap font-mono">
+                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl shadow-sm p-5">
+                  <div className="text-sm font-bold text-card-foreground mb-2">{t('login_student_title')}</div>
+                  <div className="text-xs text-card-foreground whitespace-pre-wrap font-mono">
                     {t('login_student_example')}
                   </div>
-                  <div className="mt-3 text-xs text-gray-700">
+                  <div className="mt-3 text-xs text-muted-foreground">
                     {t('login_note_slow')}
                   </div>
                 </div>
 
-                <div className="bg-yellow-100 border border-yellow-200 rounded-xl shadow-sm p-5">
-                  <div className="text-sm font-bold text-gray-900 mb-2">{t('login_professor_title')}</div>
-                  <div className="text-xs text-gray-800 whitespace-pre-wrap font-mono">
+                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl shadow-sm p-5">
+                  <div className="text-sm font-bold text-card-foreground mb-2">{t('login_professor_title')}</div>
+                  <div className="text-xs text-card-foreground whitespace-pre-wrap font-mono">
                     {t('login_professor_example')}
                   </div>
                 </div>
@@ -76,12 +76,12 @@ export default function LoginPage() {
               {/* Login Card Column */}
               <div className="w-full max-w-md lg:max-w-none lg:w-[28rem] mx-auto">
                 {/* Login Card */}
-                <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                <div className="bg-card rounded-2xl shadow-xl border border-border overflow-hidden">
                 {/* Header */}
                 <div className="bg-primary text-white px-8 py-6 text-center">
               <div className="mb-4">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-white bg-opacity-20 rounded-full">
-                  <FontAwesomeIcon icon={faUser} className="text-2xl text-primary" />
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-lg">
+                  <FontAwesomeIcon icon={faUser} className="text-2xl text-[#0272D1]" />
                 </div>
               </div>
               <h1 className="text-2xl font-bold mb-2">{t('login_welcome')}</h1>
@@ -99,12 +99,12 @@ export default function LoginPage() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Email Field */}
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-muted-foreground mb-2">
                     {t('login_email_label')}
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-gray-400" />
+                      <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-muted-foreground" />
                     </div>
                     <input
                       id="email"
@@ -113,7 +113,7 @@ export default function LoginPage() {
                       required
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                      className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
                       placeholder={t('login_email_placeholder')}
                     />
                   </div>
@@ -121,12 +121,12 @@ export default function LoginPage() {
 
                 {/* Password Field */}
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-muted-foreground mb-2">
                     {t('login_password_label')}
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <FontAwesomeIcon icon={faLock} className="h-4 w-4 text-gray-400" />
+                      <FontAwesomeIcon icon={faLock} className="h-4 w-4 text-muted-foreground" />
                     </div>
                     <input
                       id="password"
@@ -135,13 +135,13 @@ export default function LoginPage() {
                       required
                       value={formData.password}
                       onChange={handleInputChange}
-                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                      className="w-full pl-10 pr-12 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
                       placeholder={t('login_password_placeholder')}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground transition-colors"
                     >
                       <FontAwesomeIcon 
                         icon={showPassword ? faEyeSlash : faEye} 
@@ -158,9 +158,9 @@ export default function LoginPage() {
                       id="remember"
                       name="remember"
                       type="checkbox"
-                      className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                      className="h-4 w-4 text-primary focus:ring-primary border-input rounded"
                     />
-                    <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
+                    <label htmlFor="remember" className="ml-2 block text-sm text-muted-foreground">
                       {t('login_remember_me')}
                     </label>
                   </div>
@@ -173,7 +173,7 @@ export default function LoginPage() {
                 </div>
 
                 {errorMessage && (
-                  <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  <div className="rounded-lg border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
                     {t(errorMessage) || errorMessage}
                   </div>
                 )}
@@ -191,8 +191,8 @@ export default function LoginPage() {
             </div>
 
             {/* Footer */}
-            <div className="bg-gray-50 px-8 py-4 border-t border-gray-100">
-              <p className="text-center text-sm text-gray-600">
+            <div className="bg-accent px-8 py-4 border-t border-border">
+              <p className="text-center text-sm text-muted-foreground">
                 {t('login_no_account')}{' '}
                 <button className="text-primary hover:text-blue-700 font-medium transition-colors">
                   {t('login_contact_admin')}
@@ -203,9 +203,9 @@ export default function LoginPage() {
 
                 {/* Additional Info */}
                 <div className="mt-6 text-center">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-white bg-opacity-80 rounded-lg shadow-sm">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-card bg-opacity-80 rounded-lg shadow-sm">
                     <FontAwesomeIcon icon={faGraduationCap} className="text-primary" />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-muted-foreground">
                       {t('login_footer')}
                     </span>
                   </div>
