@@ -29,7 +29,7 @@ const TableCell = ({ children, className = "" }: TableCellProps) => (
 
 const CompletedBadge = ({ completed }: { completed: string }) => {
   const { t } = useTranslation();
-  if (completed === t('yes', 'Да')) {
+  if (completed === 'Да') {
     return (
       <span className="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full" title={t('completed')}> 
         <FontAwesomeIcon icon={faCheckCircle} className="w-4 h-4" />
@@ -229,7 +229,7 @@ export default function ApplicationsPage() {
             <div>
               <h3 className="text-lg font-bold text-card-foreground">{t('completed', 'Завршени')}</h3>
               <p className="text-2xl font-bold text-green-600">
-                {applications.filter(app => app.completed === t('yes', 'Да')).length}
+                {applications.filter(app => app.completed === 'Да').length}
               </p>
             </div>
           </div>

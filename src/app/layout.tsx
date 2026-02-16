@@ -7,6 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
 import { ThemeProvider } from '../components/theme-provider';
 import { ThemeToggle } from '../components/theme-toggle';
+import ContactBubble from '../components/contact-bubble';
 
 config.autoAddCss = false;
 
@@ -34,6 +35,7 @@ export default function RootLayout({
               <ThemeToggle />
             </div>
             <div className="mx-auto max-w-6xl px-4">{children}</div>
+            <ContactBubble />
           </I18nextProvider>
         </ThemeProvider>
       </body>

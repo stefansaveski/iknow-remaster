@@ -56,30 +56,30 @@ const TableCell = ({ children, className = "" }: TableCellProps) => (
 const StatusBadge = ({ status }: { status: string }) => {
   const { t } = useTranslation();
   const baseClasses = "px-2 py-1 rounded-full text-xs font-medium";
-  if (status === t('valid')) {
+  if (status === 'Валидно') {
     return (
       <span className={`${baseClasses} bg-green-100 text-green-800 flex items-center gap-1`}>
         <FontAwesomeIcon icon={faCheckCircle} className="w-3 h-3" />
-        {t('valid')}
+        {t('Валидно', 'Валидно')}
       </span>
     );
   }
   return (
     <span className={`${baseClasses} bg-accent text-gray-800`}>
-      {t(status) || status}
+      {t(status, status)}
     </span>
   );
 };
 
 const YesNoBadge = ({ value }: { value: string }) => {
   const { t } = useTranslation();
-  if (value === t('yes')) {
+  if (value === 'Да') {
     return (
       <span className="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">
         <FontAwesomeIcon icon={faCheck} className="w-3 h-3" />
       </span>
     );
-  } else if (value === t('no')) {
+  } else if (value === 'Не') {
     return (
       <span className="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">
         <FontAwesomeIcon icon={faTimes} className="w-3 h-3" />
@@ -312,12 +312,12 @@ export default function SemestersPage() {
                     {semester.completed !== "Не" ? (
                       <span className="text-green-600 font-medium flex items-center gap-1">
                         <FontAwesomeIcon icon={faCheckCircle} className="w-3 h-3" />
-                        {semester.completed}
+                        {t(semester.completed, semester.completed)}
                       </span>
                     ) : (
                       <span className="text-red-600 font-medium flex items-center gap-1">
                         <FontAwesomeIcon icon={faTimesCircle} className="w-3 h-3" />
-                        {semester.completed}
+                        {t('Не', 'Не')}
                       </span>
                     )}
                   </TableCell>

@@ -57,18 +57,21 @@ export default function LoginPage() {
               <div className="w-full flex flex-col gap-4">
                 <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl shadow-sm p-5">
                   <div className="text-sm font-bold text-card-foreground mb-2">{t('login_student_title')}</div>
-                  <div className="text-xs text-card-foreground whitespace-pre-wrap font-mono">
+                  <div className="text-xs text-card-foreground whitespace-pre-wrap">
                     {t('login_student_example')}
                   </div>
-                  <div className="mt-3 text-xs text-muted-foreground">
-                    {t('login_note_slow')}
+                  <div className="mt-3 text-xs text-blue-600 font-medium">
+                    {t('login_demo_note')}
                   </div>
                 </div>
 
                 <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl shadow-sm p-5">
                   <div className="text-sm font-bold text-card-foreground mb-2">{t('login_professor_title')}</div>
-                  <div className="text-xs text-card-foreground whitespace-pre-wrap font-mono">
+                  <div className="text-xs text-card-foreground whitespace-pre-wrap">
                     {t('login_professor_example')}
+                  </div>
+                  <div className="mt-3 text-xs text-blue-600 font-medium">
+                    {t('login_demo_note')}
                   </div>
                 </div>
               </div>

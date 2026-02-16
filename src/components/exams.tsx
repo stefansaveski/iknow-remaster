@@ -289,8 +289,8 @@ const Exams = () => {
               {getSortedExams().map((exam) => (
                 <tr key={exam.id} className="hover:bg-accent/50 transition-colors duration-150">
                   <td className="py-4 px-4 text-sm text-card-foreground">{exam.id}</td>
-                  <td className="py-4 px-4 text-sm text-card-foreground font-medium">{exam.subject}</td>
-                  <td className="py-4 px-4 text-sm text-muted-foreground">{exam.semester}</td>
+                  <td className="py-4 px-4 text-sm text-card-foreground font-medium">{t(exam.subject, exam.subject)}</td>
+                  <td className="py-4 px-4 text-sm text-muted-foreground">{t(exam.semester, exam.semester)}</td>
                   <td className="py-4 px-4 text-sm text-muted-foreground">{exam.credits}</td>
                   <td className="py-4 px-4 text-sm text-muted-foreground">{exam.date}</td>
                   <td className="py-4 px-4">

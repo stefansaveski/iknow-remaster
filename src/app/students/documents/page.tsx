@@ -5,16 +5,20 @@ import {
   faFilePdf, 
   faChevronDown,
   faCheckCircle,
+  faClock,
   faMoneyBillWave,
   faFileText,
   faChevronLeft,
   faChevronRight,
   faAngleDoubleLeft,
-  faAngleDoubleRight
+  faAngleDoubleRight,
+  faSpinner
 } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import documentsData from '@/data/documents.json';
 import { useTranslation } from 'react-i18next';
+import { getAccessToken } from '@/lib/auth';
+import { downloadDocumentPDF } from '@/lib/pdf-generators';
 
 interface TableCellProps {
   children: React.ReactNode;
@@ -29,10 +33,18 @@ const TableCell = ({ children, className = "" }: TableCellProps) => (
 
 const StatusBadge = ({ status }: { status: string }) => {
   const { t } = useTranslation();
-  if (status === t('approved', 'Одобрено')) {
+  if (status === 'approved' || status === t('approved', 'Одобрено')) {
     return (
       <span className="inline-flex items-center justify-center w-8 h-8 bg-green-100 text-green-600 rounded-full">
         <FontAwesomeIcon icon={faCheckCircle} className="w-5 h-5" />
+      </span>
+    );
+  }
+  if (status === 'pending') {
+    return (
+      <span className="inline-flex items-center gap-1 text-xs font-medium text-yellow-700 bg-yellow-100 px-2 py-1 rounded-full">
+        <FontAwesomeIcon icon={faClock} className="w-3 h-3" />
+        {t('pending', 'Во обработка')}
       </span>
     );
   }
@@ -51,16 +63,84 @@ const PriceBadge = ({ price }: { price: number }) => {
   return <span className="font-medium text-blue-600">{price.toFixed(2)}</span>;
 };
 
+interface DocumentRecord {
+  id: number;
+  archive: string;
+  date: string;
+  request: string;
+  price: number;
+  paid: string;
+  document: string;
+  payOnline: boolean;
+  status: string;
+  comment: string;
+}
+
 export default function DocumentsPage() {
   const [selectedDocumentType, setSelectedDocumentType] = useState("select_document");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [comment, setComment] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(15);
+  const [downloadingId, setDownloadingId] = useState<number | null>(null);
+  const [documents, setDocuments] = useState<DocumentRecord[]>(documentsData.documents as DocumentRecord[]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useTranslation();
 
+  const handleDownload = async (docId: number, request: string, archive: string, date: string) => {
+    const token = getAccessToken();
+    if (!token) {
+      alert(t('not_authenticated', 'Не сте најавени. Ве молиме најавете се повторно.'));
+      return;
+    }
+    setDownloadingId(docId);
+    try {
+      await downloadDocumentPDF(request, archive, date, token);
+    } catch (err) {
+      console.error('PDF generation error:', err);
+      alert(t('pdf_error', 'Грешка при генерирање на документот. Обидете се повторно.'));
+    } finally {
+      setDownloadingId(null);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (selectedDocumentType === "select_document") return;
+
+    const docType = documentsData.documentTypes.find(d => d.id === selectedDocumentType);
+    if (!docType) return;
+
+    setIsSubmitting(true);
+
+    // Generate archive number (random 5-digit)
+    const archiveNumber = String(90000 + Math.floor(Math.random() * 10000));
+
+    // Current date in DD.MM.YYYY format
+    const now = new Date();
+    const dateStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}`;
+
+    const newDoc: DocumentRecord = {
+      id: documents.length > 0 ? Math.max(...documents.map(d => d.id)) + 1 : 1,
+      archive: archiveNumber,
+      date: dateStr,
+      request: docType.name,
+      price: docType.price,
+      paid: "Не",
+      document: "Преземи",
+      payOnline: docType.price > 0,
+      status: "pending",
+      comment: comment,
+    };
+
+    setDocuments(prev => [newDoc, ...prev]);
+    setSelectedDocumentType("select_document");
+    setComment("");
+    setIsSubmitting(false);
+    alert(t('document_submitted', 'Барањето за документ е успешно поднесено!'));
+  };
+
   const selectedDocument = documentsData.documentTypes.find(d => d.id === selectedDocumentType);
-  const { documents, paymentInfo } = documentsData;
+  const { paymentInfo } = documentsData;
 
   const totalPages = Math.ceil(documents.length / recordsPerPage);
   const startIndex = (currentPage - 1) * recordsPerPage;
@@ -152,11 +232,12 @@ export default function DocumentsPage() {
 
         <div className="flex justify-end mt-6">
           <button
-            className="bg-primary hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 flex items-center gap-2"
-            disabled={selectedDocumentType === "select_document"}
+            onClick={handleSubmit}
+            className="bg-primary hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={selectedDocumentType === "select_document" || isSubmitting}
           >
-            <FontAwesomeIcon icon={faFileText} className="w-4 h-4" />
-            {t('submit', 'Поднеси')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faFileText} className={`w-4 h-4 ${isSubmitting ? 'animate-spin' : ''}`} />
+            {isSubmitting ? t('submitting', 'Се поднесува...') : t('submit', 'Поднеси')}
           </button>
         </div>
       </div>
@@ -196,13 +277,24 @@ export default function DocumentsPage() {
                     <PriceBadge price={document.price} />
                   </TableCell>
                   <TableCell className="text-center">
-                    <span className="text-sm font-medium text-green-600">
+                    <span className={`text-sm font-medium ${document.paid === 'ДА' ? 'text-green-600' : 'text-red-500'}`}>
                       {document.paid}
                     </span>
                   </TableCell>
                   <TableCell className="text-center">
-                    <button className="text-primary hover:text-blue-700 font-medium text-sm underline">
-                      {document.document}
+                    <button 
+                      onClick={() => handleDownload(document.id, document.request, document.archive, document.date)}
+                      disabled={downloadingId === document.id}
+                      className="text-primary hover:text-blue-700 font-medium text-sm underline disabled:opacity-50 disabled:cursor-wait inline-flex items-center gap-1"
+                    >
+                      {downloadingId === document.id ? (
+                        <>
+                          <FontAwesomeIcon icon={faSpinner} className="w-3 h-3 animate-spin" />
+                          {t('generating', 'Генерира...')}
+                        </>
+                      ) : (
+                        t('download', document.document)
+                      )}
                     </button>
                   </TableCell>
                   <TableCell className="text-center">
