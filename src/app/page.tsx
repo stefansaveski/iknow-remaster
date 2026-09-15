@@ -38,7 +38,13 @@ export default function LoginPage() {
     setIsSubmitting(true);
     try {
       const session = await login({ email: formData.email, password: formData.password });
-      window.location.href = session.role === 'Professor' ? '/professor' : '/students';
+      // Admins previously fell through to /students, where they have no
+      // enrolments and every page renders empty.
+      const home =
+        session.role === 'Professor' ? '/professor'
+        : session.role === 'Admin'   ? '/admin'
+        : '/students';
+      window.location.href = home;
     } catch (err) {
       setErrorMessage(err instanceof Error ? err.message : 'Login failed.');
     } finally {
@@ -69,6 +75,16 @@ export default function LoginPage() {
                   <div className="text-sm font-bold text-card-foreground mb-2">{t('login_professor_title')}</div>
                   <div className="text-xs text-card-foreground whitespace-pre-wrap">
                     {t('login_professor_example')}
+                  </div>
+                  <div className="mt-3 text-xs text-blue-600 font-medium">
+                    {t('login_demo_note')}
+                  </div>
+                </div>
+
+                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl shadow-sm p-5">
+                  <div className="text-sm font-bold text-card-foreground mb-2">{t('login_admin_title')}</div>
+                  <div className="text-xs text-card-foreground whitespace-pre-wrap">
+                    {t('login_admin_example')}
                   </div>
                   <div className="mt-3 text-xs text-blue-600 font-medium">
                     {t('login_demo_note')}

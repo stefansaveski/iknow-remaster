@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react';
 import { getAccessToken } from '@/lib/auth';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { useTranslation } from 'react-i18next';
+import { apiUrl } from '@/lib/api';
 
 type PersonalInfo = {
   firstName: string;
@@ -153,7 +154,7 @@ export default function ProfilePage() {
       }
 
       try {
-        const response = await fetch('https://iknow-api.onrender.com/api/user/getUser', {
+        const response = await fetch(apiUrl('/api/user/getUser'), {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

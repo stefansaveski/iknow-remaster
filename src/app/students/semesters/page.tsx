@@ -14,6 +14,8 @@ import {
 import { useEffect, useState } from 'react';
 import { getAccessToken } from '@/lib/auth';
 import { useTranslation } from 'react-i18next';
+import { apiUrl } from '@/lib/api';
+import EnrollSemesterDialog from '@/components/enroll-semester-dialog';
 
 type Semester = {
   id: number | string;
@@ -112,6 +114,9 @@ export default function SemestersPage() {
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [enrollOpen, setEnrollOpen] = useState(false);
+  // Bumped after a successful enrolment so the table reloads.
+  const [reloadKey, setReloadKey] = useState(0);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -129,7 +134,7 @@ export default function SemestersPage() {
       }
 
       try {
-        const response = await fetch('https://iknow-api.onrender.com/api/user/getSemesters', {
+        const response = await fetch(apiUrl('/api/user/getSemesters'), {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -157,7 +162,7 @@ export default function SemestersPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   if (isLoading) {
     return (
@@ -183,16 +188,25 @@ export default function SemestersPage() {
     <div className="min-h-screen pb-8">
       {/* Header */}
       <div className="bg-primary text-white rounded-xl p-8 mb-8">
-        <div className="flex items-center gap-4">
-          <div className="bg-white rounded-full p-4">
-            <FontAwesomeIcon icon={faCalendarAlt} className="text-3xl text-[#0272D1]" />
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center gap-4">
+            <div className="bg-white rounded-full p-4">
+              <FontAwesomeIcon icon={faCalendarAlt} className="text-3xl text-[#0272D1]" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold mb-2">{t('semesters')}</h1>
+              <p className="text-lg opacity-90">
+                {t('semesters_overview')}
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-3xl font-bold mb-2">{t('semesters')}</h1>
-            <p className="text-lg opacity-90">
-              {t('semesters_overview')}
-            </p>
-          </div>
+
+          <button
+            className="self-start rounded-lg bg-white px-5 py-3 font-semibold text-[#0272D1] shadow-sm hover:bg-white/90 md:self-auto"
+            onClick={() => setEnrollOpen(true)}
+          >
+            + {t('enroll_semester')}
+          </button>
         </div>
       </div>
 
@@ -372,6 +386,12 @@ export default function SemestersPage() {
           </div>
         </div>
       </div>
+
+      <EnrollSemesterDialog
+        open={enrollOpen}
+        onClose={() => setEnrollOpen(false)}
+        onEnrolled={() => setReloadKey((k) => k + 1)}
+      />
     </div>
   );
 }

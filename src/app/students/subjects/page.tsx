@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from 'react';
 import { getAccessToken } from '@/lib/auth';
 import { useTranslation } from 'react-i18next';
+import { apiUrl } from '@/lib/api';
 
 interface Subject {
   id: number;
@@ -192,7 +193,7 @@ export default function SubjectsPage() {
       }
 
       try {
-        const response = await fetch('https://iknow-api.onrender.com/api/user/getSubjects', {
+        const response = await fetch(apiUrl('/api/user/getSubjects'), {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

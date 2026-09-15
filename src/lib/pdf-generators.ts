@@ -1,6 +1,7 @@
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { loadCyrillicFonts } from './pdf-fonts';
+import { apiUrl } from './api';
 
 /* ---------- shared types ---------- */
 
@@ -1055,7 +1056,7 @@ export async function downloadDocumentPDF(
   accessToken: string,
 ): Promise<void> {
   // Fetch student profile
-  const profileRes = await fetch('https://iknow-api.onrender.com/api/user/getUser', {
+  const profileRes = await fetch(apiUrl('/api/user/getUser'), {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   if (!profileRes.ok) throw new Error('Не може да се вчита профилот на студентот');
@@ -1094,7 +1095,7 @@ export async function downloadDocumentPDF(
 
   let passedExams: PassedExam[] = [];
   if (needsExams) {
-    const examsRes = await fetch('https://iknow-api.onrender.com/api/user/getPassedSubjects', {
+    const examsRes = await fetch(apiUrl('/api/user/getPassedSubjects'), {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     if (examsRes.ok) {

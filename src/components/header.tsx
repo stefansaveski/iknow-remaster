@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { getAccessToken, clearAuthTokens } from '@/lib/auth';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
+import { apiUrl } from '@/lib/api';
 
 const Header = () => {
 
@@ -19,7 +20,7 @@ const Header = () => {
       const token = getAccessToken();
       if (!token) return;
       try {
-        const response = await fetch('https://iknow-api.onrender.com/api/user/getUser', {
+        const response = await fetch(apiUrl('/api/user/getUser'), {
           method: 'GET',
           headers: { Authorization: `Bearer ${token}` },
         });

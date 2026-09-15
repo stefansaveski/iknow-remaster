@@ -1,9 +1,10 @@
+import { API_BASE_URL } from './api';
 export type AuthTokens = {
   accessToken: string;
   refreshToken: string;
 };
 
-export type UserRole = 'Professor' | 'Student' | string;
+export type UserRole = 'Professor' | 'Student' | 'Admin' | string;
 
 export type AuthSession = AuthTokens & {
   role: UserRole;
@@ -90,7 +91,7 @@ export function clearAuthTokens() {
 }
 
 export async function login(params: { email: string; password: string }): Promise<AuthSession> {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://iknow-api.onrender.com';
+  const baseUrl = API_BASE_URL;
 
   const response = await fetch(`${baseUrl}/api/auth/login`, {
     method: 'POST',

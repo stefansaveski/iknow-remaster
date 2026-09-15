@@ -2,38 +2,41 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from 'react-i18next';
+import { apiUrl } from '@/lib/api';
+import { getAccessToken } from '@/lib/auth';
 
 type UsersBySubject = {
-  Id?: string;
-  Name?: string;
-  Grade: number;
+  /** users.id - what the grading endpoints expect as StudentId. */
+  id: number;
+  name?: string;
+  /** users.index - the number shown to the professor and searched on. */
+  index?: string;
+  grade: number;
+  semester?: string;
 };
 
 type SubjectsAndUsers = {
-  Name?: string;
-  Id?: number;
-  Users: UsersBySubject[];
+  name?: string;
+  id?: number;
+  code?: string;
+  users: UsersBySubject[];
 };
 
 type GradePayload = {
   StudentId: number;
   SubjectId: number;
-  grade: number;
+  Grade: number;
 };
 
 type FlatRow = {
-  studentIdStr: string;
-  studentIdNum: number | null;
+  studentIdNum: number;
+  studentIndex: string;
   studentName: string;
   subjectId: number;
   subjectName: string;
+  semester: string;
   grade: number;
 };
-
-function toInt(value: string): number | null {
-  const n = Number.parseInt(value, 10);
-  return Number.isFinite(n) ? n : null;
-}
 
 export default function ProfessorStudentsPage() {
   const { t } = useTranslation();
@@ -51,7 +54,15 @@ export default function ProfessorStudentsPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/prof/students", { cache: "no-store" });
+      const token = getAccessToken();
+      if (!token) {
+        throw new Error("You are not signed in.");
+      }
+
+      const res = await fetch(apiUrl("/api/prof/students"), {
+        cache: "no-store",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (!res.ok) {
         throw new Error(`Failed to fetch students (${res.status})`);
       }
@@ -60,11 +71,11 @@ export default function ProfessorStudentsPage() {
 
       const nextSelections: Record<string, number> = {};
       for (const subj of data) {
-        if (!subj.Id) continue;
-        for (const u of subj.Users) {
-          const key = `${subj.Id}:${u.Id ?? ""}`;
-          const current = u.Grade;
-          nextSelections[key] = current >= 5 && current <= 10 ? current : 5;
+        if (!subj.id) continue;
+        for (const u of subj.users) {
+          const key = `${subj.id}:${u.id}`;
+          // grade_type only declares 6..10, so an ungraded row starts at 6.
+          nextSelections[key] = u.grade >= 6 && u.grade <= 10 ? u.grade : 6;
         }
       }
       setGradeSelection(nextSelections);
@@ -82,15 +93,16 @@ export default function ProfessorStudentsPage() {
   const flatRows = useMemo<FlatRow[]>(() => {
     const rows: FlatRow[] = [];
     for (const subj of subjects) {
-      if (!subj.Id) continue;
-      for (const u of subj.Users) {
+      if (!subj.id) continue;
+      for (const u of subj.users) {
         rows.push({
-          studentIdStr: u.Id ?? "",
-          studentIdNum: toInt(u.Id ?? ""),
-          studentName: u.Name ?? "",
-          subjectId: subj.Id,
-          subjectName: subj.Name ?? "",
-          grade: u.Grade,
+          studentIdNum: u.id,
+          studentIndex: u.index ?? "",
+          studentName: u.name ?? "",
+          subjectId: subj.id,
+          subjectName: subj.name ?? "",
+          semester: u.semester ?? "",
+          grade: u.grade,
         });
       }
     }
@@ -101,7 +113,7 @@ export default function ProfessorStudentsPage() {
     const q = studentIdQuery.trim();
     return flatRows.filter((r) => {
       if (subjectFilter !== "all" && String(r.subjectId) !== subjectFilter) return false;
-      if (q.length > 0 && !r.studentIdStr.includes(q)) return false;
+      if (q.length > 0 && !r.studentIndex.includes(q)) return false;
       return true;
     });
   }, [flatRows, subjectFilter, studentIdQuery]);
@@ -110,9 +122,17 @@ export default function ProfessorStudentsPage() {
     setActionBusyKey(busyKey);
     setError(null);
     try {
-      const res = await fetch(url, {
+      const token = getAccessToken();
+      if (!token) {
+        throw new Error("You are not signed in.");
+      }
+
+      const res = await fetch(apiUrl(url), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(payload),
       });
       const body = (await res.json()) as { ok: boolean; message?: string };
@@ -134,7 +154,7 @@ export default function ProfessorStudentsPage() {
         <div>
           <h1 className="text-2xl font-semibold text-card-foreground">{t('prof_students_title')}</h1>
           <p className="text-muted-foreground mt-1">
-            {t('prof_students_data_note')} <span className="font-mono">/api/prof/students</span> (demo store).
+            {t('prof_students_data_note')} <span className="font-mono">/api/prof/students</span>.
           </p>
         </div>
 
@@ -148,10 +168,10 @@ export default function ProfessorStudentsPage() {
             >
               <option value="all">{t('all_subjects')}</option>
               {subjects
-                .filter((s) => typeof s.Id === "number")
+                .filter((s) => typeof s.id === "number")
                 .map((s) => (
-                  <option key={String(s.Id)} value={String(s.Id)}>
-                    {s.Name ?? `${t('subject')} ${s.Id}`}
+                  <option key={String(s.id)} value={String(s.id)}>
+                    {s.name ?? `${t('subject')} ${s.id}`}
                   </option>
                 ))}
             </select>
@@ -201,15 +221,20 @@ export default function ProfessorStudentsPage() {
               </tr>
             ) : (
               filteredRows.map((r) => {
-                const key = `${r.subjectId}:${r.studentIdStr}`;
-                const selected = gradeSelection[key] ?? 5;
+                const key = `${r.subjectId}:${r.studentIdNum}`;
+                const selected = gradeSelection[key] ?? 6;
                 const busy = actionBusyKey === key;
 
                 return (
                   <tr key={key} className="hover:bg-accent">
                     <td className="px-4 py-3 border-b text-card-foreground">{r.studentName}</td>
-                    <td className="px-4 py-3 border-b text-card-foreground">{r.studentIdStr}</td>
-                    <td className="px-4 py-3 border-b text-card-foreground">{r.subjectName}</td>
+                    <td className="px-4 py-3 border-b text-card-foreground">{r.studentIndex}</td>
+                    <td className="px-4 py-3 border-b text-card-foreground">
+                      {r.subjectName}
+                      {r.semester && (
+                        <span className="block text-xs text-muted-foreground">{r.semester}</span>
+                      )}
+                    </td>
                     <td className="px-4 py-3 border-b">
                       <div className="flex items-center gap-3">
                         <select
@@ -222,7 +247,7 @@ export default function ProfessorStudentsPage() {
                             }))
                           }
                         >
-                          {[5, 6, 7, 8, 9, 10].map((g) => (
+                          {[6, 7, 8, 9, 10].map((g) => (
                             <option key={g} value={g}>
                               {g}
                             </option>
@@ -236,13 +261,12 @@ export default function ProfessorStudentsPage() {
                     <td className="px-4 py-3 border-b">
                       <div className="flex flex-wrap gap-2">
                         <button
-                          disabled={busy || r.studentIdNum === null}
+                          disabled={busy}
                           className="px-3 py-2 rounded-lg bg-green-600 text-white text-sm font-medium disabled:opacity-50"
                           onClick={() => {
-                            if (r.studentIdNum === null) return;
                             void postGrade(
                               "/api/prof/grade/add",
-                              { StudentId: r.studentIdNum, SubjectId: r.subjectId, grade: selected },
+                              { StudentId: r.studentIdNum, SubjectId: r.subjectId, Grade: selected },
                               key,
                             );
                           }}
@@ -251,13 +275,12 @@ export default function ProfessorStudentsPage() {
                         </button>
 
                         <button
-                          disabled={busy || r.studentIdNum === null}
+                          disabled={busy}
                           className="px-3 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium disabled:opacity-50"
                           onClick={() => {
-                            if (r.studentIdNum === null) return;
                             void postGrade(
                               "/api/prof/grade/edit",
-                              { StudentId: r.studentIdNum, SubjectId: r.subjectId, grade: selected },
+                              { StudentId: r.studentIdNum, SubjectId: r.subjectId, Grade: selected },
                               key,
                             );
                           }}
@@ -266,13 +289,12 @@ export default function ProfessorStudentsPage() {
                         </button>
 
                         <button
-                          disabled={busy || r.studentIdNum === null}
+                          disabled={busy}
                           className="px-3 py-2 rounded-lg bg-gray-800 text-white text-sm font-medium disabled:opacity-50"
                           onClick={() => {
-                            if (r.studentIdNum === null) return;
                             void postGrade(
                               "/api/prof/grade/remove",
-                              { StudentId: r.studentIdNum, SubjectId: r.subjectId, grade: 0 },
+                              { StudentId: r.studentIdNum, SubjectId: r.subjectId, Grade: 0 },
                               key,
                             );
                           }}

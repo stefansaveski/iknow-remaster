@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { getAccessToken } from '@/lib/auth';
+import { apiUrl } from '@/lib/api';
 
 type PassedSubject = {
   id: number;
@@ -55,7 +56,7 @@ const Exams = () => {
       }
 
       try {
-        const response = await fetch('https://iknow-api.onrender.com/api/user/getPassedSubjects', {
+        const response = await fetch(apiUrl('/api/user/getPassedSubjects'), {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
